@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import './App.css'
+import HomeLayout from './Components/layout/HomeLayout'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
  <>
- 
- <h1 className='bg-red-800 font-bold text-4xl'>This is to test that it's working</h1>
+ <HomeLayout></HomeLayout>
  </>
   )
 }
