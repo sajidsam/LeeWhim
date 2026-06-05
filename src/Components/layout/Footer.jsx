@@ -28,15 +28,15 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="mx-6 mb-6 mt-12">
-      <section className="bg-[#dd5b89] rounded-[2.5rem] px-10 py-12 text-white flex flex-col md:flex-row flex-wrap justify-between items-center gap-8 shadow-lg">
+    <footer className="w-full py-6">
+      <section className="bg-[#dd5b89] px-10 py-12 text-white flex flex-col md:flex-row flex-wrap justify-between items-center gap-8 shadow-lg">
         
         {/* Left Side: Brand & Logo */}
         <div className="flex flex-col items-center md:items-start space-y-3">
           <img
             src={logo}
             alt="Lee's Whim Logo"
-            className="h-14 w-auto object-contain brightness-100 invert-0"
+            className="h-16 w-auto object-contain brightness-100 invert-0"
           />
           <p className="text-white/80 text-sm font-light text-center md:text-left max-w-xs">
             Adding a touch of whimsy and elegance to your everyday style.

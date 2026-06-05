@@ -30,15 +30,15 @@ const navItems = [
 
 const Navbar = () => {
   return (
-    <nav className="mx-6 mt-4">
-      <section className="bg-[#dd5b89] rounded-full h-24 px-10 flex items-center justify-between">
+    <nav className="w-full">
+      <section className="bg-[#dd5b89] h-24 px-10 flex items-center justify-between">
 
         {/* Logo */}
         <div className="flex items-center">
           <img
             src={logo}
             alt="Lee's Whim Logo"
-            className="h-16 w-auto object-contain"
+            className="h-[5.5rem] max-h-full w-auto object-contain"
           />
         </div>
 
