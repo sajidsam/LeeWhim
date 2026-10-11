@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --color-dark: #322D29;
+    --color-primary: #72383D;
+    --color-taupe: #AC9C8D;
+    --color-light-taupe: #D1C7BD;
+    --color-gray: #D9D9D9;
+    --color-cream: #EFE9E1;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #EFE9E1;
+    color: #322D29;
+  }
+
+  button {
+    border: none;
+    outline: none;
   }
 }
 

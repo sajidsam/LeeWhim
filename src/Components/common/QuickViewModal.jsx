@@ -37,25 +37,25 @@ const QuickViewModal = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-product-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#322D29]/75 backdrop-blur-xs animate-fade-in"
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col md:flex-row border border-rose-100"
+        className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col md:flex-row text-[#322D29]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
+        {/* Close Button - Borderless */}
         <button
           type="button"
           onClick={handleClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-700 hover:text-red-600 shadow-md flex items-center justify-center transition-colors"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-[#EFE9E1] text-[#322D29] hover:bg-[#72383D] hover:text-white shadow-xs flex items-center justify-center transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Left: Product Images */}
-        <div className="w-full md:w-1/2 p-4 md:p-6 bg-rose-50/30 flex flex-col justify-between">
+        <div className="w-full md:w-1/2 p-4 md:p-6 bg-[#EFE9E1]/50 flex flex-col justify-between">
           <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-inner bg-white">
             <img
               src={displayImage}
@@ -63,7 +63,7 @@ const QuickViewModal = () => {
               className="w-full h-full object-cover object-center transition-all duration-300"
             />
             {product.discount && (
-              <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold bg-[#be123c] text-white rounded-full">
+              <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold bg-[#72383D] text-[#EFE9E1] rounded-full">
                 {product.discount}
               </span>
             )}
@@ -74,8 +74,8 @@ const QuickViewModal = () => {
             <button
               type="button"
               onClick={() => setActiveImage(product.image)}
-              className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all ${
-                displayImage === product.image ? "border-[#be123c] scale-105" : "border-gray-200 opacity-70"
+              className={`w-14 h-14 rounded-xl overflow-hidden transition-all ${
+                displayImage === product.image ? "ring-2 ring-[#72383D] scale-105" : "opacity-70 hover:opacity-100"
               }`}
             >
               <img src={product.image} alt="Thumbnail 1" className="w-full h-full object-cover" />
@@ -84,8 +84,8 @@ const QuickViewModal = () => {
               <button
                 type="button"
                 onClick={() => setActiveImage(product.hoverImage)}
-                className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all ${
-                  displayImage === product.hoverImage ? "border-[#be123c] scale-105" : "border-gray-200 opacity-70"
+                className={`w-14 h-14 rounded-xl overflow-hidden transition-all ${
+                  displayImage === product.hoverImage ? "ring-2 ring-[#72383D] scale-105" : "opacity-70 hover:opacity-100"
                 }`}
               >
                 <img src={product.hoverImage} alt="Thumbnail 2" className="w-full h-full object-cover" />
@@ -99,54 +99,54 @@ const QuickViewModal = () => {
           <div>
             {/* Category & Rating */}
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#9f1239]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#AC9C8D]">
                 {product.subCategory || product.category}
               </span>
-              <div className="flex items-center gap-1.5 text-amber-500 font-semibold text-xs">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <div className="flex items-center gap-1.5 text-[#72383D] font-semibold text-xs">
+                <Star className="w-3.5 h-3.5 fill-[#72383D] text-[#72383D]" />
                 <span>{product.rating}</span>
-                <span className="text-gray-400">({product.reviewCount} reviews)</span>
+                <span className="text-[#AC9C8D]">({product.reviewCount} reviews)</span>
               </div>
             </div>
 
             {/* Title */}
-            <h2 id="modal-product-title" className="text-lg md:text-xl font-bold text-gray-900 leading-snug">
+            <h2 id="modal-product-title" className="text-lg md:text-xl font-bold text-[#322D29] leading-snug">
               {product.name}
             </h2>
 
             {/* Price Row */}
             <div className="flex items-baseline gap-3 my-3">
-              <span className="text-2xl font-extrabold text-[#be123c]">
+              <span className="text-2xl font-extrabold text-[#72383D]">
                 ৳{product.price.toLocaleString()}
               </span>
               {product.originalPrice && (
-                <span className="text-sm text-gray-400 line-through">
+                <span className="text-sm text-[#AC9C8D] line-through">
                   ৳{product.originalPrice.toLocaleString()}
                 </span>
               )}
-              <span className="text-xs px-2 py-0.5 bg-emerald-50 text-emerald-700 font-semibold rounded-md border border-emerald-200">
+              <span className="text-xs px-2.5 py-1 bg-[#EFE9E1] text-[#322D29] font-medium rounded-md">
                 In Stock ({product.stockCount} left)
               </span>
             </div>
 
             {/* Description */}
-            <p className="text-xs md:text-sm text-gray-600 leading-relaxed mb-4">
+            <p className="text-xs md:text-sm text-[#322D29]/80 leading-relaxed mb-4">
               {product.description}
             </p>
 
             {/* Fabric / Material */}
             {product.fabric && (
-              <div className="text-xs text-gray-700 bg-rose-50/50 p-2.5 rounded-xl border border-rose-100 mb-4">
-                <span className="font-semibold text-rose-950">Material / Craft: </span>
+              <div className="text-xs text-[#322D29] bg-[#EFE9E1] p-2.5 rounded-xl mb-4">
+                <span className="font-semibold text-[#322D29]">Material / Craft: </span>
                 <span>{product.fabric}</span>
               </div>
             )}
 
-            {/* Color Selection */}
+            {/* Color Selection - Borderless */}
             {product.colors && product.colors.length > 0 && (
               <div className="mb-4">
-                <label className="block text-xs font-semibold text-gray-800 mb-2">
-                  Select Shade / Color: <span className="text-[#be123c]">{currentColor}</span>
+                <label className="block text-xs font-semibold text-[#322D29] mb-2">
+                  Select Shade / Color: <span className="text-[#72383D]">{currentColor}</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {product.colors.map((color) => (
@@ -154,10 +154,10 @@ const QuickViewModal = () => {
                       key={color}
                       type="button"
                       onClick={() => setSelectedColor(color)}
-                      className={`px-3 py-1.5 text-xs rounded-xl font-medium border transition-all ${
+                      className={`px-3 py-1.5 text-xs rounded-xl font-medium transition-all ${
                         currentColor === color
-                          ? "border-[#be123c] bg-rose-50 text-[#be123c] font-semibold"
-                          : "border-gray-200 text-gray-700 hover:border-gray-300"
+                          ? "bg-[#72383D] text-[#EFE9E1] font-semibold"
+                          : "bg-[#EFE9E1] text-[#322D29] hover:bg-[#D1C7BD]"
                       }`}
                     >
                       {color}
@@ -167,24 +167,24 @@ const QuickViewModal = () => {
               </div>
             )}
 
-            {/* Quantity */}
+            {/* Quantity Controls - Borderless */}
             <div className="flex items-center gap-4 mb-5">
-              <span className="text-xs font-semibold text-gray-800">Quantity:</span>
-              <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+              <span className="text-xs font-semibold text-[#322D29]">Quantity:</span>
+              <div className="flex items-center rounded-xl overflow-hidden bg-[#EFE9E1]">
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3 py-1 text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                  className="px-3 py-1 text-[#322D29] hover:bg-[#D1C7BD] font-bold transition-colors"
                 >
                   -
                 </button>
-                <span className="px-3 py-1 text-xs font-bold text-gray-900 min-w-8 text-center bg-white">
+                <span className="px-3 py-1 text-xs font-bold text-[#322D29] min-w-8 text-center bg-white">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="px-3 py-1 text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                  className="px-3 py-1 text-[#322D29] hover:bg-[#D1C7BD] font-bold transition-colors"
                 >
                   +
                 </button>
@@ -192,13 +192,13 @@ const QuickViewModal = () => {
             </div>
           </div>
 
-          {/* Action Buttons & Badges */}
-          <div className="space-y-3 pt-3 border-t border-rose-100">
+          {/* Action Buttons - Solid Borderless */}
+          <div className="space-y-3 pt-3">
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="py-2.5 px-3 text-xs md:text-sm font-semibold rounded-xl border border-[#be123c] text-[#be123c] hover:bg-rose-50 transition-colors flex items-center justify-center gap-1.5"
+                className="py-2.5 px-3 text-xs md:text-sm font-semibold rounded-xl bg-[#EFE9E1] text-[#322D29] hover:bg-[#322D29] hover:text-[#EFE9E1] transition-colors flex items-center justify-center gap-1.5"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Add to Cart
@@ -206,9 +206,9 @@ const QuickViewModal = () => {
               <button
                 type="button"
                 onClick={handleBuyNow}
-                className="py-2.5 px-3 text-xs md:text-sm font-semibold rounded-xl bg-[#be123c] text-white hover:bg-[#9f1239] transition-colors flex items-center justify-center gap-1.5 shadow-md"
+                className="py-2.5 px-3 text-xs md:text-sm font-semibold rounded-xl bg-[#72383D] text-[#EFE9E1] hover:bg-[#322D29] transition-colors flex items-center justify-center gap-1.5 shadow-xs"
               >
-                <Zap className="w-4 h-4 fill-amber-300 text-amber-300" />
+                <Zap className="w-4 h-4 fill-[#EFE9E1]" />
                 Buy Now
               </button>
             </div>
@@ -216,24 +216,24 @@ const QuickViewModal = () => {
             <button
               type="button"
               onClick={() => toggleWishlist(product)}
-              className="w-full py-2 text-xs font-medium text-gray-600 hover:text-[#be123c] flex items-center justify-center gap-1.5"
+              className="w-full py-2 text-xs font-medium text-[#322D29] hover:text-[#72383D] flex items-center justify-center gap-1.5"
             >
-              <Heart className={`w-3.5 h-3.5 ${wishlisted ? "fill-[#be123c] text-[#be123c]" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 ${wishlisted ? "fill-[#72383D] text-[#72383D]" : ""}`} />
               {wishlisted ? "Saved in your Wishlist" : "Add to Wishlist"}
             </button>
 
             {/* Trust Micro-badges */}
-            <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] text-gray-500 border-t border-gray-100 text-center">
+            <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] text-[#AC9C8D] text-center">
               <div className="flex flex-col items-center gap-1">
-                <Truck className="w-3.5 h-3.5 text-[#be123c]" />
+                <Truck className="w-3.5 h-3.5 text-[#72383D]" />
                 <span>Cash on Delivery</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#be123c]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#72383D]" />
                 <span>100% Authentic</span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <RefreshCw className="w-3.5 h-3.5 text-[#be123c]" />
+                <RefreshCw className="w-3.5 h-3.5 text-[#72383D]" />
                 <span>7 Days Exchange</span>
               </div>
             </div>

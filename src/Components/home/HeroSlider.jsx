@@ -32,7 +32,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[75vh] overflow-hidden group bg-[#1a0e19]">
+    <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[75vh] overflow-hidden group bg-[#322D29]">
       {/* Slides Container */}
       {HERO_SLIDES.map((slide, index) => {
         const isActive = index === currentSlide;
@@ -52,41 +52,41 @@ const HeroSlider = () => {
                   isActive ? "scale-105" : "scale-100"
                 }`}
               />
-              {/* Luxury Gradient Overlay tailored for women's boutique */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent sm:from-black/75 sm:via-black/40 sm:to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#140a14] via-transparent to-transparent opacity-80" />
+              {/* Luxury Gradient Overlay in Luxe #322D29 palette */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#322D29]/95 via-[#322D29]/65 to-transparent sm:from-[#322D29]/90 sm:via-[#322D29]/50 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#322D29] via-transparent to-transparent opacity-85" />
             </div>
 
             {/* Slide Content */}
             <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-              <div className="max-w-xl text-white space-y-2.5 sm:space-y-4">
+              <div className="max-w-xl text-[#EFE9E1] space-y-2.5 sm:space-y-4">
                 {/* Tag */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-rose-200 text-xs font-semibold tracking-wider uppercase">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#72383D] text-[#EFE9E1] text-xs font-semibold tracking-wider uppercase">
+                  <Sparkles className="w-3.5 h-3.5 text-[#D1C7BD]" />
                   <span>{slide.tag}</span>
                 </div>
 
                 {/* Subtitle */}
-                <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-amber-200 font-brand">
+                <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#D1C7BD] font-brand">
                   {slide.subtitle}
                 </p>
 
                 {/* Title */}
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-serif-luxury leading-tight text-white drop-shadow-md">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-serif-luxury leading-tight text-[#EFE9E1] drop-shadow-md">
                   {slide.title}
                 </h1>
 
                 {/* Description */}
-                <p className="text-xs sm:text-sm md:text-base text-gray-200 line-clamp-2 sm:line-clamp-3 leading-relaxed max-w-lg">
+                <p className="text-xs sm:text-sm md:text-base text-[#D1C7BD] line-clamp-2 sm:line-clamp-3 leading-relaxed max-w-lg">
                   {slide.description}
                 </p>
 
-                {/* CTA Button */}
+                {/* CTA Button - Borderless */}
                 <div className="pt-2 sm:pt-4">
                   <button
                     type="button"
                     onClick={() => handleCtaClick(slide.categorySlug)}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3.5 bg-[#be123c] hover:bg-[#9f1239] text-white text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 shadow-xl hover:shadow-rose-900/50 hover:scale-105 active:scale-95"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3.5 bg-[#72383D] hover:bg-[#322D29] text-[#EFE9E1] text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 shadow-lg active:scale-95"
                   >
                     <span>{slide.buttonText}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -98,12 +98,12 @@ const HeroSlider = () => {
         );
       })}
 
-      {/* Prev / Next Navigation Chevrons */}
+      {/* Prev / Next Navigation Chevrons - Borderless */}
       <button
         type="button"
         onClick={handlePrev}
         aria-label="Previous Slide"
-        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/30 hover:bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95"
+        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#322D29]/50 hover:bg-[#322D29]/90 text-[#EFE9E1] flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-105 active:scale-95"
       >
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
@@ -112,7 +112,7 @@ const HeroSlider = () => {
         type="button"
         onClick={handleNext}
         aria-label="Next Slide"
-        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/30 hover:bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95"
+        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#322D29]/50 hover:bg-[#322D29]/90 text-[#EFE9E1] flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-105 active:scale-95"
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
@@ -126,7 +126,7 @@ const HeroSlider = () => {
             onClick={() => setCurrentSlide(i)}
             aria-label={`Go to slide ${i + 1}`}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === currentSlide ? "w-8 bg-[#be123c]" : "w-2 bg-white/50 hover:bg-white"
+              i === currentSlide ? "w-8 bg-[#72383D]" : "w-2 bg-[#D9D9D9]/60 hover:bg-[#EFE9E1]"
             }`}
           />
         ))}

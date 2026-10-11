@@ -10,7 +10,6 @@ import {
   User,
   Phone,
   Sparkles,
-  ChevronDown,
 } from "lucide-react";
 
 const Navbar = () => {
@@ -34,89 +33,81 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-xs">
+    <header className="sticky top-0 z-40 w-full bg-[#EFE9E1]/95 backdrop-blur-md shadow-xs">
       {/* Top Announcement Bar */}
-      <div className="bg-[#1e111d] text-rose-100 text-[11px] sm:text-xs py-1.5 px-4">
+      <div className="bg-[#322D29] text-[#EFE9E1] text-[11px] sm:text-xs py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
-            <p className="font-medium truncate">
-              ✨ Free Delivery in Bangladesh on orders over ৳2,500 | 100% Authentic Handloom ✨
+            <span className="inline-block w-2 h-2 rounded-full bg-[#AC9C8D] animate-pulse"></span>
+            <p className="font-medium truncate tracking-wide">
+              Free Nationwide Delivery in Bangladesh on orders over ৳2,500 | 100% Authentic Handloom
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-4 text-rose-200">
+          <div className="hidden sm:flex items-center gap-4 text-[#D1C7BD]">
             <a
               href="tel:+8801970085954"
-              className="flex items-center gap-1 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 hover:text-[#EFE9E1] transition-colors"
             >
-              <Phone className="w-3 h-3 text-rose-400" />
+              <Phone className="w-3 h-3 text-[#AC9C8D]" />
               <span>+880 1970 085 954</span>
             </a>
-            <span className="text-rose-700">|</span>
-            <span className="text-amber-300 font-medium">Cash on Delivery</span>
+            <span className="text-[#AC9C8D]">|</span>
+            <span className="text-[#D1C7BD] font-medium">Cash on Delivery</span>
           </div>
         </div>
       </div>
 
       {/* Main Navbar Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 sm:h-20 gap-2 sm:gap-4">
+        <div className="flex items-center justify-between h-20 sm:h-24 gap-3 sm:gap-6">
           {/* Left: Mobile Menu Trigger (lg:hidden) */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-800 hover:bg-rose-50 hover:text-[#be123c] transition-colors"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-[#322D29] bg-white/70 hover:bg-[#72383D] hover:text-white transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Logo & Brand Name */}
-          <div className="flex items-center gap-3">
-            <a href="/" className="flex items-center gap-2.5 group">
+          {/* Logo - User's authentic Lee's Whim logo */}
+          <div className="flex items-center">
+            <a href="/" className="inline-block group py-1">
               <img
                 src={logo}
                 alt="Lee's Whim Logo"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-16 sm:h-20 max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="flex flex-col">
-                <span className="font-brand text-lg sm:text-2xl font-bold tracking-wider text-rose-950 group-hover:text-[#be123c] transition-colors">
-                  LEE'S WHIM
-                </span>
-                <span className="text-[9px] sm:text-[10px] tracking-widest text-[#be123c] font-semibold uppercase -mt-1 hidden sm:block">
-                  Atelier & Luxury Jewellery
-                </span>
-              </div>
             </a>
           </div>
 
           {/* Center: Desktop Search Bar (hidden on mobile) */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-6">
+          <div className="hidden lg:flex flex-1 max-w-md mx-4">
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-xs bg-rose-50/40 hover:bg-rose-50/80 border border-rose-200/70 rounded-full text-gray-400 hover:text-gray-600 transition-all duration-200 shadow-inner group"
+              className="w-full flex items-center justify-between px-5 py-2.5 text-xs bg-white text-[#322D29] rounded-full hover:bg-white/80 transition-all duration-200 shadow-xs group"
             >
-              <span className="flex items-center gap-2.5 text-gray-500 font-medium">
-                <Search className="w-4 h-4 text-rose-600 group-hover:scale-110 transition-transform" />
+              <span className="flex items-center gap-2.5 text-[#AC9C8D] font-medium">
+                <Search className="w-4 h-4 text-[#72383D]" />
                 Search Jamdani, Banarasi, Kundan chokers...
               </span>
-              <kbd className="px-2 py-0.5 text-[10px] bg-white border border-rose-200 rounded-md text-gray-400 shadow-xs font-mono">
+              <kbd className="px-2 py-0.5 text-[10px] bg-[#EFE9E1] rounded-md text-[#322D29] font-mono">
                 ⌘K
               </kbd>
             </button>
           </div>
 
           {/* Right Action Icons */}
-          <div className="flex items-center gap-1 sm:gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Mobile Search Button */}
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
-              className="lg:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-gray-700 hover:bg-rose-50 hover:text-[#be123c] transition-colors"
+              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#322D29] bg-white/70 hover:bg-[#72383D] hover:text-white transition-colors"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -130,11 +121,11 @@ const Navbar = () => {
                 showToast(`Wishlist contains ${wishlistCount} saved pieces`, "wishlist");
               }}
               aria-label="Wishlist"
-              className="hidden sm:flex relative w-10 h-10 rounded-full items-center justify-center text-gray-700 hover:bg-rose-50 hover:text-[#be123c] transition-colors group"
+              className="hidden sm:flex relative w-10 h-10 rounded-full items-center justify-center text-[#322D29] bg-white hover:bg-[#72383D] hover:text-white transition-colors shadow-2xs group"
             >
               <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
               {wishlistCount > 0 && (
-                <span className="absolute 1 top-1 -right-0.5 w-4 h-4 rounded-full bg-[#be123c] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#72383D] text-[#EFE9E1] text-[10px] font-bold flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
@@ -145,34 +136,34 @@ const Navbar = () => {
               type="button"
               onClick={() => setIsCartOpen(true)}
               aria-label="View shopping bag"
-              className="relative flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-50/80 hover:bg-[#be123c] text-rose-950 hover:text-white transition-all duration-300 border border-rose-200/80 group active:scale-95 shadow-xs"
+              className="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white hover:bg-[#72383D] text-[#322D29] hover:text-[#EFE9E1] transition-all duration-300 shadow-2xs group active:scale-95"
             >
               <div className="relative">
-                <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <ShoppingBag className="w-5 h-5 text-[#72383D] group-hover:text-[#EFE9E1] group-hover:scale-110 transition-transform" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#be123c] group-hover:bg-white text-white group-hover:text-[#be123c] text-[10px] font-bold flex items-center justify-center shadow-xs">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#72383D] group-hover:bg-[#322D29] text-[#EFE9E1] text-[10px] font-bold flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
               </div>
               <div className="hidden md:flex flex-col text-left">
-                <span className="text-[10px] uppercase font-semibold text-rose-700 group-hover:text-rose-100">
+                <span className="text-[10px] uppercase font-semibold text-[#AC9C8D] group-hover:text-[#D1C7BD]">
                   Cart
                 </span>
-                <span className="text-xs font-bold leading-none">
+                <span className="text-xs font-bold leading-none text-[#322D29] group-hover:text-[#EFE9E1]">
                   ৳{cartSubtotal.toLocaleString()}
                 </span>
               </div>
             </button>
 
-            {/* Login / WhatsApp Button */}
+            {/* Contact Atelier Button */}
             <a
               href="https://wa.me/+8801970085954"
               target="_blank"
               rel="noreferrer"
-              className="hidden lg:flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#1e111d] hover:bg-[#2e182c] text-rose-100 hover:text-white transition-all duration-200 shadow-sm"
+              className="hidden lg:flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold rounded-xl bg-[#322D29] hover:bg-[#72383D] text-[#EFE9E1] transition-all duration-200 shadow-xs"
             >
-              <User className="w-3.5 h-3.5 text-rose-400" />
+              <User className="w-3.5 h-3.5 text-[#AC9C8D]" />
               <span>Contact Atelier</span>
             </a>
           </div>
@@ -180,16 +171,16 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Secondary Category Navigation Bar */}
-      <div className="hidden lg:block border-t border-rose-100/70 bg-rose-50/30">
+      <div className="hidden lg:block bg-white/70">
         <div className="max-w-7xl mx-auto px-8">
-          <ul className="flex items-center justify-between text-xs font-medium text-gray-700 py-2.5">
+          <ul className="flex items-center justify-between text-xs font-medium text-[#322D29] py-2.5">
             <li>
               <button
                 type="button"
                 onClick={() => handleCategoryClick("all")}
-                className="flex items-center gap-1.5 text-[#be123c] font-bold hover:text-[#9f1239] transition-colors"
+                className="flex items-center gap-1.5 text-[#72383D] font-bold hover:text-[#322D29] transition-colors"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
                 All Collections
               </button>
             </li>
@@ -198,22 +189,22 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => handleCategoryClick(cat.slug)}
-                  className="hover:text-[#be123c] transition-colors py-1 relative group flex items-center gap-1"
+                  className="hover:text-[#72383D] transition-colors py-1 relative group flex items-center gap-1"
                 >
                   <span>{cat.name}</span>
                   {cat.badge && (
-                    <span className="text-[9px] px-1.5 py-0.2 bg-rose-100 text-[#be123c] rounded-full font-semibold">
+                    <span className="text-[9px] px-1.5 py-0.2 bg-[#EFE9E1] text-[#72383D] rounded-full font-semibold">
                       {cat.badge}
                     </span>
                   )}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#be123c] transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72383D] transition-all duration-300 group-hover:w-full" />
                 </button>
               </li>
             ))}
             <li>
               <a
                 href="#reviews-section"
-                className="text-gray-500 hover:text-[#be123c] transition-colors"
+                className="text-[#AC9C8D] hover:text-[#72383D] transition-colors"
               >
                 Client Reviews
               </a>

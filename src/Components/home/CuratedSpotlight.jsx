@@ -19,26 +19,26 @@ const CuratedSpotlight = () => {
   };
 
   return (
-    <section className="py-10 sm:py-14 bg-white border-b border-rose-100/60">
+    <section className="py-10 sm:py-14 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#be123c]">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#72383D]">
+              <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
               <span>Artisan Showcase</span>
             </div>
-            <h2 className="text-xl sm:text-3xl font-bold font-serif-luxury text-gray-900 mt-1">
+            <h2 className="text-xl sm:text-3xl font-bold font-serif-luxury text-[#322D29] mt-1">
               Festive Heritage Spotlight
             </h2>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+            <p className="text-xs sm:text-sm text-[#AC9C8D] mt-1">
               Pure handwoven masterpieces and royal polki jewellery crafted for celebration
             </p>
           </div>
           <button
             type="button"
             onClick={handleSpotlightCta}
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#be123c] hover:text-[#9f1239] transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#72383D] hover:text-[#322D29] transition-colors"
           >
             <span>View All Spotlight</span>
             <ArrowRight className="w-4 h-4" />
@@ -47,30 +47,30 @@ const CuratedSpotlight = () => {
 
         {/* MorshedMart Grid: 1 Big Card (left) + 6 Product Cards (right) */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
-          {/* Big Spotlight Visual Card (Col 1 on desktop) */}
-          <div className="lg:col-span-1 relative rounded-3xl overflow-hidden shadow-lg min-h-[360px] lg:min-h-full flex flex-col justify-end p-6 bg-rose-950 group">
+          {/* Big Spotlight Visual Card (Col 1 on desktop) - Borderless */}
+          <div className="lg:col-span-1 relative rounded-3xl overflow-hidden shadow-md min-h-[360px] lg:min-h-full flex flex-col justify-end p-6 bg-[#322D29] group">
             <img
               src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85"
               alt="Artisan Saree Spotlight"
-              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-80"
+              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-75"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#322D29] via-[#322D29]/40 to-transparent" />
 
-            <div className="relative z-10 space-y-2 text-white">
-              <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase bg-[#be123c] text-white rounded-full">
+            <div className="relative z-10 space-y-2 text-[#EFE9E1]">
+              <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase bg-[#72383D] text-[#EFE9E1] rounded-full">
                 LIMITED EDITION
               </span>
               <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury leading-snug">
                 The Royal Jamdani Heirloom
               </h3>
-              <p className="text-xs text-rose-100 line-clamp-3">
+              <p className="text-xs text-[#D1C7BD] line-clamp-3">
                 Woven over 90 days with 100-count fine muslin cotton and pure gilded zari. A true family treasure.
               </p>
               <div className="pt-2">
                 <button
                   type="button"
                   onClick={handleSpotlightCta}
-                  className="w-full py-2.5 bg-white text-rose-950 text-xs font-bold rounded-xl hover:bg-rose-100 transition-colors flex items-center justify-center gap-1.5 shadow-md"
+                  className="w-full py-2.5 bg-[#EFE9E1] text-[#322D29] text-xs font-bold rounded-xl hover:bg-[#72383D] hover:text-[#EFE9E1] transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <span>Explore Jamdani</span>
                   <ArrowRight className="w-3.5 h-3.5" />

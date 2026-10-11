@@ -20,17 +20,17 @@ const MobileBottomNav = () => {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-rose-100 z-40 lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+      className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md z-40 lg:hidden shadow-[0_-4px_20px_rgba(50,45,41,0.08)]"
     >
       <div className="flex justify-around items-center py-2 px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]">
         {/* Home */}
         <button
           type="button"
           onClick={handleHomeClick}
-          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-[#be123c]"
+          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-[#72383D]"
         >
-          <div className="p-1 rounded-full bg-rose-50">
-            <Home className="w-5 h-5 text-[#be123c]" />
+          <div className="p-1 rounded-full bg-[#EFE9E1]">
+            <Home className="w-5 h-5 text-[#72383D]" />
           </div>
           <span className="text-[10px] font-bold">Home</span>
         </button>
@@ -39,12 +39,12 @@ const MobileBottomNav = () => {
         <button
           type="button"
           onClick={handleWishlistClick}
-          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-gray-500 hover:text-gray-800 relative active:scale-95"
+          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-[#322D29] hover:text-[#72383D] relative active:scale-95"
         >
           <div className="relative p-1">
             <Heart className="w-5 h-5" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#be123c] text-white text-[9px] font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#72383D] text-[#EFE9E1] text-[9px] font-bold flex items-center justify-center">
                 {wishlistCount}
               </span>
             )}
@@ -56,12 +56,12 @@ const MobileBottomNav = () => {
         <button
           type="button"
           onClick={() => setIsCartOpen(true)}
-          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-gray-500 hover:text-gray-800 relative active:scale-95"
+          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-[#322D29] hover:text-[#72383D] relative active:scale-95"
         >
           <div className="relative p-1">
             <ShoppingBag className="w-5 h-5" />
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#be123c] text-white text-[9px] font-bold flex items-center justify-center animate-pulse-subtle">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#72383D] text-[#EFE9E1] text-[9px] font-bold flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -74,7 +74,7 @@ const MobileBottomNav = () => {
           href="https://wa.me/+8801970085954"
           target="_blank"
           rel="noreferrer"
-          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-gray-500 hover:text-gray-800 active:scale-95"
+          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 text-[#322D29] hover:text-[#72383D] active:scale-95"
         >
           <div className="p-1">
             <User className="w-5 h-5" />

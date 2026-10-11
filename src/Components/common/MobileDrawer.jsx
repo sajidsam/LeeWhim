@@ -1,7 +1,7 @@
 import React from "react";
 import { useShop } from "../../Context/ShopContext";
 import { CATEGORIES } from "../../data/mockProducts";
-import { X, Search, Phone, Heart, Sparkles, MessageCircle, ChevronRight, MapPin } from "lucide-react";
+import { X, Search, Phone, Sparkles, MessageCircle, ChevronRight, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const MobileDrawer = () => {
@@ -28,42 +28,38 @@ const MobileDrawer = () => {
       role="dialog"
       aria-modal="true"
       aria-label="Mobile Navigation Menu"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden animate-fade-in"
+      className="fixed inset-0 z-50 bg-[#322D29]/75 backdrop-blur-xs lg:hidden animate-fade-in"
       onClick={() => setIsMobileMenuOpen(false)}
     >
       <div
-        className="fixed inset-y-0 left-0 w-4/5 max-w-xs bg-white shadow-2xl flex flex-col animate-slide-in-right duration-300"
-        style={{ animationDirection: "normal" }}
+        className="fixed inset-y-0 left-0 w-4/5 max-w-xs bg-white shadow-2xl flex flex-col text-[#322D29]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-rose-50/40">
+        <div className="p-4 flex items-center justify-between bg-[#EFE9E1]">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="Lee's Whim" className="h-10 w-auto object-contain" />
-            <span className="font-brand font-bold text-sm tracking-wider text-rose-950">
-              LEE'S WHIM
-            </span>
+            <img src={logo} alt="Lee's Whim" className="h-12 w-auto object-contain" />
           </div>
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="w-8 h-8 rounded-full text-gray-500 hover:text-red-500 hover:bg-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full text-[#322D29] hover:bg-[#72383D] hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Quick Search Bar */}
-        <div className="p-3 border-b border-gray-100">
+        {/* Quick Search Bar - Borderless */}
+        <div className="p-3 bg-[#EFE9E1]/40">
           <button
             type="button"
             onClick={() => {
               setIsMobileMenuOpen(false);
               setIsSearchOpen(true);
             }}
-            className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl text-gray-500 hover:bg-rose-50/40 transition-colors"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs bg-white rounded-xl text-[#AC9C8D] hover:text-[#322D29] shadow-2xs transition-colors"
           >
-            <Search className="w-4 h-4 text-rose-600" />
+            <Search className="w-4 h-4 text-[#72383D]" />
             <span>Search Sarees & Jewellery...</span>
           </button>
         </div>
@@ -71,7 +67,7 @@ const MobileDrawer = () => {
         {/* Categories List */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 px-1">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#AC9C8D] mb-2 px-1">
               Shop by Category
             </h3>
             <ul className="space-y-1">
@@ -79,13 +75,13 @@ const MobileDrawer = () => {
                 <button
                   type="button"
                   onClick={() => handleSelectCategory("all")}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-rose-50 hover:text-[#be123c] transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-[#322D29] hover:bg-[#EFE9E1] hover:text-[#72383D] transition-colors"
                 >
                   <span className="flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
                     All Collections
                   </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#AC9C8D]" />
                 </button>
               </li>
               {CATEGORIES.map((cat) => (
@@ -93,13 +89,13 @@ const MobileDrawer = () => {
                   <button
                     type="button"
                     onClick={() => handleSelectCategory(cat.slug)}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-gray-700 hover:bg-rose-50 hover:text-[#be123c] transition-colors"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-[#322D29] hover:bg-[#EFE9E1] hover:text-[#72383D] transition-colors"
                   >
                     <span className="flex items-center gap-2.5">
-                      <img src={cat.image} alt={cat.name} className="w-6 h-6 rounded-md object-cover" />
+                      <img src={cat.image} alt={cat.name} className="w-6 h-6 rounded-md object-cover bg-[#EFE9E1]" />
                       {cat.name}
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#EFE9E1] text-[#322D29] font-medium">
                       {cat.itemCount}
                     </span>
                   </button>
@@ -109,15 +105,15 @@ const MobileDrawer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="pt-2 border-t border-gray-100">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 px-1">
+          <div className="pt-2 border-t border-[#D1C7BD]/30">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#AC9C8D] mb-2 px-1">
               Customer Support
             </h3>
             <div className="space-y-1 text-xs">
               <a
                 href="#order-tracking"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 text-gray-700 hover:text-[#be123c] rounded-xl hover:bg-rose-50"
+                className="flex items-center gap-2.5 px-3 py-2 text-[#322D29] hover:text-[#72383D] rounded-xl hover:bg-[#EFE9E1]"
               >
                 <span>📦 Track Your Order</span>
               </a>
@@ -125,20 +121,20 @@ const MobileDrawer = () => {
                 href="https://wa.me/+8801970085954"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2.5 px-3 py-2 text-emerald-700 font-medium hover:bg-emerald-50 rounded-xl"
+                className="flex items-center gap-2.5 px-3 py-2 text-[#322D29] hover:text-[#72383D] rounded-xl hover:bg-[#EFE9E1]"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <MessageCircle className="w-4 h-4 text-[#72383D]" />
                 <span>WhatsApp Live Chat</span>
               </a>
               <a
                 href="tel:+8801970085954"
-                className="flex items-center gap-2.5 px-3 py-2 text-gray-700 hover:bg-rose-50 rounded-xl"
+                className="flex items-center gap-2.5 px-3 py-2 text-[#322D29] hover:bg-[#EFE9E1] rounded-xl"
               >
-                <Phone className="w-4 h-4 text-rose-600" />
+                <Phone className="w-4 h-4 text-[#72383D]" />
                 <span>Call: +880 1970 085 954</span>
               </a>
-              <div className="flex items-center gap-2.5 px-3 py-2 text-gray-500">
-                <MapPin className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center gap-2.5 px-3 py-2 text-[#AC9C8D]">
+                <MapPin className="w-4 h-4 text-[#AC9C8D]" />
                 <span>Dhanmondi / Gulshan, Dhaka</span>
               </div>
             </div>
@@ -146,9 +142,9 @@ const MobileDrawer = () => {
         </div>
 
         {/* Footer info */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50/80 text-[11px] text-gray-500 text-center">
-          <p>© 2026 Lee's Whim Luxury Atelier</p>
-          <p className="text-[#be123c] font-medium mt-0.5">Cash on Delivery Across Bangladesh</p>
+        <div className="p-4 bg-[#EFE9E1] text-[11px] text-[#322D29] text-center">
+          <p className="font-semibold">© 2026 Lee's Whim Luxury Atelier</p>
+          <p className="text-[#72383D] font-medium mt-0.5">Cash on Delivery Across Bangladesh</p>
         </div>
       </div>
     </div>

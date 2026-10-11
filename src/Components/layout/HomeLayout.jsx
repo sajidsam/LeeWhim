@@ -11,7 +11,7 @@ import Home from "../../pages/Home";
 
 const HomeLayout = () => {
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#faf7f7] selection:bg-[#be123c] selection:text-white">
+    <div className="relative min-h-screen flex flex-col bg-[#EFE9E1] text-[#322D29] selection:bg-[#72383D] selection:text-[#EFE9E1]">
       {/* Top Navbar */}
       <Navbar />
 

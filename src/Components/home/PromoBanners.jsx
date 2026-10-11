@@ -15,40 +15,40 @@ const PromoBanners = () => {
   };
 
   return (
-    <section className="py-10 sm:py-14 bg-rose-50/20">
+    <section className="py-10 sm:py-14 bg-[#EFE9E1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {PROMO_BANNERS.map((banner) => (
             <div
               key={banner.id}
               onClick={() => handleBannerClick(banner.categorySlug)}
-              className="group relative rounded-3xl overflow-hidden shadow-lg min-h-[260px] sm:min-h-[300px] flex flex-col justify-end p-6 sm:p-8 cursor-pointer bg-black"
+              className="group relative rounded-3xl overflow-hidden shadow-md min-h-[260px] sm:min-h-[300px] flex flex-col justify-end p-6 sm:p-8 cursor-pointer bg-[#322D29]"
             >
               {/* Background Image */}
               <img
                 src={banner.image}
                 alt={banner.title}
-                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-75"
+                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-70"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#322D29] via-[#322D29]/50 to-transparent" />
 
               {/* Text content */}
-              <div className="relative z-10 space-y-2 text-white">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-200">
-                  <Sparkles className="w-3 h-3 text-amber-300" />
+              <div className="relative z-10 space-y-2 text-[#EFE9E1]">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#72383D] text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#EFE9E1]">
+                  <Sparkles className="w-3 h-3 text-[#D1C7BD]" />
                   <span>{banner.tag}</span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold font-serif-luxury leading-tight text-white">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold font-serif-luxury leading-tight text-[#EFE9E1]">
                   {banner.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-gray-200 line-clamp-2">
+                <p className="text-xs sm:text-sm text-[#D1C7BD] line-clamp-2">
                   {banner.subtitle} — {banner.description}
                 </p>
 
                 <div className="pt-2">
-                  <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-amber-300 group-hover:text-white transition-colors">
+                  <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#EFE9E1] group-hover:text-[#D1C7BD] transition-colors">
                     <span>{banner.buttonText}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </span>
