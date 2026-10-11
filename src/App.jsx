@@ -1,15 +1,13 @@
-import { useState } from 'react'
-import './App.css'
-import HomeLayout from './Components/layout/HomeLayout'
+import React from "react";
+import { ShopProvider } from "./Context/ShopContext";
+import HomeLayout from "./Components/layout/HomeLayout";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
- <>
- <HomeLayout></HomeLayout>
- </>
-  )
+    <ShopProvider>
+      <HomeLayout />
+    </ShopProvider>
+  );
 }
 
-export default App
+export default App;
