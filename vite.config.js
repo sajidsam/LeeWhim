@@ -6,8 +6,8 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const rawApiUrl = env.VITE_API_URL || env.VITE_API_BASE_URL || 'https://rongon-backend.vercel.app'
-  const targetHost = rawApiUrl.replace(/\/api\/?$/, '') || 'https://rongon-backend.vercel.app'
+  const rawApiUrl = env.VITE_API_URL || env.VITE_API_BASE_URL || 'http://localhost:5000'
+  const targetHost = rawApiUrl.replace(/\/api\/?$/, '') || 'http://localhost:5000'
 
   return {
     plugins: [react(), tailwindcss()],
@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: targetHost,
           changeOrigin: true,
-          secure: true,
+          secure: false,
         },
       },
     },

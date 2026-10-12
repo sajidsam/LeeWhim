@@ -1,13 +1,9 @@
-// Production Vercel Backend Target
-const FALLBACK_BACKEND_URL = "https://rongon-backend.vercel.app/api";
-
-// Resolves Vite environment variables with graceful fallback
-const RAW_ENV_URL =
+// Resolves API base URL strictly from environment variable or relative /api
+const PRIMARY_URL = (
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "/api";
-
-const PRIMARY_URL = RAW_ENV_URL.replace(/\/$/, "");
+  "/api"
+).replace(/\/$/, "");
 
 // ==========================================
 // CLIENT-SIDE IN-MEMORY CACHE
@@ -34,7 +30,7 @@ const setClientCache = (key, data, ttlMs = CLIENT_CACHE_TTL_MS) => {
 };
 
 /**
- * Robust fetcher with in-memory caching, content-type verification, and secure Vercel backend fallback
+ * Robust fetcher with in-memory caching and content-type verification
  */
 const apiRequest = async (pathAndQuery, useCache = true) => {
   const cleanPath = pathAndQuery.startsWith("/") ? pathAndQuery : `/${pathAndQuery}`;
@@ -47,49 +43,24 @@ const apiRequest = async (pathAndQuery, useCache = true) => {
     }
   }
 
-  let responseData = null;
+  // 2. Fetch using configured PRIMARY_URL
+  const targetUrl = `${PRIMARY_URL}${cleanPath}`;
+  const res = await fetch(targetUrl, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-  // 2. Try primary route (Vite Proxy /api or VITE_API_URL)
-  try {
-    const primaryTarget = PRIMARY_URL.startsWith("http")
-      ? `${PRIMARY_URL}${cleanPath}`
-      : `${PRIMARY_URL}${cleanPath}`;
-
-    const res = await fetch(primaryTarget, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
-
-    const contentType = res.headers.get("content-type") || "";
-    if (res.ok && contentType.includes("application/json")) {
-      responseData = await res.json();
-    }
-  } catch (err) {
-    // Primary failed, will try fallback below
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
   }
 
-  // 3. Fallback to direct production Vercel backend if primary didn't succeed or returned HTML
-  if (!responseData) {
-    try {
-      const fallbackTarget = `${FALLBACK_BACKEND_URL}${cleanPath}`;
-      const resFallback = await fetch(fallbackTarget, {
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      const contentType = resFallback.headers.get("content-type") || "";
-      if (resFallback.ok && contentType.includes("application/json")) {
-        responseData = await resFallback.json();
-      } else {
-        throw new Error(`HTTP ${resFallback.status}: ${resFallback.statusText}`);
-      }
-    } catch (errFallback) {
-      console.warn(`[API] Could not fetch ${cleanPath} from backend:`, errFallback.message);
-      throw errFallback;
-    }
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(`Expected JSON response but received ${contentType}`);
   }
+
+  const responseData = await res.json();
 
   // 4. Store in memory cache
   if (useCache && responseData) {
