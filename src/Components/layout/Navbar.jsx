@@ -205,10 +205,11 @@ const Navbar = () => {
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          {/* Categories Nav Container */}
+          {/* Categories Nav Container - Scrollbar Free */}
           <div
             ref={navScrollRef}
             className="flex-1 flex items-center justify-center gap-7 overflow-x-auto scrollbar-hide py-1 scroll-smooth"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <button
               type="button"

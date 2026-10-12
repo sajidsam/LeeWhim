@@ -9,13 +9,13 @@ const HeroSlider = () => {
   const [touchEndX, setTouchEndX] = useState(null);
   const { setActiveCategoryFilter } = useShop();
 
-  // Auto advance slide
+  // Auto advance slide - resets timer on user interaction
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5500);
+    }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [currentSlide]);
 
   const handlePrev = () => {
     setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
@@ -81,15 +81,20 @@ const HeroSlider = () => {
                 } ${isActive ? "scale-103" : "scale-100"}`}
               />
               {/* Luxury Gradient Overlay */}
-              {slide.isCustomBanner ? (
+              {slide.id === "slide-3" ? (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#72383D]/95 via-[#72383D]/60 to-transparent sm:from-[#72383D]/90 sm:via-[#72383D]/40 lg:from-[#72383D]/80 lg:via-transparent lg:to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#322D29]/50 via-transparent to-transparent sm:hidden" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0C1A30]/95 via-[#0C1A30]/65 to-transparent sm:from-[#0C1A30]/90 sm:via-[#0C1A30]/40 lg:from-[#0C1A30]/80 lg:via-transparent lg:to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C1A30]/60 via-transparent to-transparent sm:hidden" />
+                </>
+              ) : slide.id === "slide-2" ? (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#241715]/95 via-[#241715]/65 to-transparent sm:from-[#241715]/90 sm:via-[#241715]/40 lg:from-[#241715]/80 lg:via-transparent lg:to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#241715]/60 via-transparent to-transparent sm:hidden" />
                 </>
               ) : (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#322D29]/95 via-[#322D29]/65 to-transparent sm:from-[#322D29]/90 sm:via-[#322D29]/50 sm:to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#322D29] via-transparent to-transparent opacity-85" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#72383D]/95 via-[#72383D]/60 to-transparent sm:from-[#72383D]/90 sm:via-[#72383D]/40 lg:from-[#72383D]/80 lg:via-transparent lg:to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#322D29]/50 via-transparent to-transparent sm:hidden" />
                 </>
               )}
             </div>

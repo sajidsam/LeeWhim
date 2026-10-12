@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useShop } from "../../Context/ShopContext";
+import PayWithBadges from "./PayWithBadges";
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Truck, Check } from "lucide-react";
 
 const FREE_SHIPPING_THRESHOLD = 2500;
@@ -230,6 +231,10 @@ const CartDrawer = () => {
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#AC9C8D]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#72383D]" />
                 <span>100% Safe & Secure Cash on Delivery</span>
+              </div>
+
+              <div className="pt-2 border-t border-[#D1C7BD]/30">
+                <PayWithBadges showLocal={true} align="center" isLight={true} />
               </div>
             </div>
           )}

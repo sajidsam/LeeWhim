@@ -72,8 +72,11 @@ const CatalogSection = () => {
           </div>
         </div>
 
-        {/* Category Filter Pills - Borderless */}
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-3 mb-8">
+        {/* Category Filter Pills - Borderless, Scrollbar Free */}
+        <div
+          className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-3 mb-8"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           <button
             type="button"
             onClick={() => setActiveCategoryFilter("all")}

@@ -36,7 +36,10 @@ const CategoryBar = () => {
         </div>
 
         {/* Categories Horizontal Carousel */}
-        <div className="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide pb-2 pt-1">
+        <div
+          className="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide pb-2 pt-1"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {/* "All" button - Borderless */}
           <button
             type="button"

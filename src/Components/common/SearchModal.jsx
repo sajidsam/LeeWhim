@@ -69,8 +69,11 @@ const SearchModal = () => {
           </button>
         </div>
 
-        {/* Popular Tags - Borderless */}
-        <div className="px-5 py-3 bg-[#EFE9E1]/50 flex items-center gap-2 overflow-x-auto">
+        {/* Popular Tags - Borderless, Scrollbar Free */}
+        <div
+          className="px-5 py-3 bg-[#EFE9E1]/50 flex items-center gap-2 overflow-x-auto scrollbar-hide"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           <span className="text-[11px] font-semibold text-[#AC9C8D] uppercase tracking-wider shrink-0">
             Popular:
           </span>

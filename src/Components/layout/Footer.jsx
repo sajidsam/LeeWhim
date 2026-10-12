@@ -1,5 +1,6 @@
 import React from "react";
 import logoWhite from "@/assets/logoWhite.png";
+import PayWithBadges from "../common/PayWithBadges";
 import {
   MapPin,
   Phone,
@@ -222,23 +223,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Payment Methods Badges - Unified White Sticker */}
-        <div className="pt-6 pb-6 border-t border-[#AC9C8D]/20 flex flex-col items-center gap-3">
-          <span className="text-xs uppercase tracking-widest text-[#AC9C8D] font-semibold">
-            Secure Payment & Nationwide Delivery
-          </span>
-          <div className="bg-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-center gap-4 sm:gap-6 shadow-sm">
-            <span className="font-extrabold text-[#E2136E] text-xs sm:text-sm tracking-wide">bKash</span>
-            <span className="font-extrabold text-[#F7941D] text-xs sm:text-sm tracking-wide">Nagad</span>
-            <span className="font-extrabold text-[#8C3494] text-xs sm:text-sm tracking-wide">Rocket</span>
-            <span className="font-extrabold text-[#1A1F71] text-xs sm:text-sm tracking-wide">VISA</span>
-            <span className="font-extrabold text-[#EB001B] text-xs sm:text-sm tracking-wide">Mastercard</span>
-            <span className="h-4 w-px bg-[#D9D9D9] hidden sm:inline-block" />
-            <span className="font-bold text-[#72383D] text-xs sm:text-sm flex items-center gap-1.5">
-              <Truck className="w-4 h-4" />
-              Cash on Delivery (COD)
-            </span>
-          </div>
+        {/* Payment Methods Badges - Modern "Pay With" with individual logo cards */}
+        <div className="pt-8 pb-7 border-t border-[#AC9C8D]/20 flex flex-col items-center">
+          <PayWithBadges showLocal={true} align="center" />
         </div>
 
         {/* Bottom Copyright */}

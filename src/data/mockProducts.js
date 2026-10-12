@@ -9,6 +9,8 @@
  */
 
 import bannerImg from "../assets/banner.png";
+import banner2Img from "../assets/banner2.png";
+import banner3Img from "../assets/banner3.png";
 
 export const CATEGORIES = [
   {
@@ -104,22 +106,24 @@ export const HERO_SLIDES = [
     "buttonText": "Explore Sarees",
     "categorySlug": "saree",
     "tag": "Heritage Weaves",
-    "image": "https://www.lerevecraze.com/wp-content/uploads/2026/10/3f9b121d-2c25-431c-ae1f-1b5d679d1928.jpg",
-    "accentColor": "#AC9C8D"
+    "image": banner2Img,
+    "isCustomBanner": true,
+    "accentColor": "#8A3C2A"
   },
   {
     "id": "slide-3",
-    "title": "Contemporary Kameez & Fusion",
-    "mobileTitleLine1": "Contemporary Kameez",
-    "mobileTitleLine2": "& Fusion Wear",
+    "title": "Artisanal Handcrafted Bags",
+    "mobileTitleLine1": "Artisanal Handcrafted",
+    "mobileTitleLine2": "Leather Bags",
     "mobileButtonText": "Shop Now",
-    "subtitle": "Modern Silhouettes for Every Day",
-    "description": "Effortlessly stylish A-line tunics, jacquard single kameez and shrug styles crafted from breathable viscose and cotton fabrics.",
-    "buttonText": "Discover Kameez",
-    "categorySlug": "kameez",
-    "tag": "Trending Now",
-    "image": "https://www.lerevecraze.com/wp-content/uploads/2026/10/18f56a93-1f57-4183-8fdb-9ac9f68824b8.jpg",
-    "accentColor": "#322D29"
+    "subtitle": "Signature Embossed Leather Collection",
+    "description": "Exquisite handcrafted leather shoulder bags embellished with intricate embossed motifs, tailored for modern sophistication.",
+    "buttonText": "Explore Bags",
+    "categorySlug": "all",
+    "tag": "Luxury Bags",
+    "image": banner3Img,
+    "isCustomBanner": true,
+    "accentColor": "#0F1E36"
   }
 ];
 
