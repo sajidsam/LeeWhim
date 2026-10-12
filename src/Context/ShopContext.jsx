@@ -55,38 +55,51 @@ export const ShopProvider = ({ children }) => {
   // Floating Toast alert
   const [toast, setToast] = useState({ visible: false, message: "", type: "info" });
 
-  // Fetch optimized targeted initial collections from MongoDB API
+  // Fetch optimized targeted initial collections from MongoDB API with resilient independent section loading
   const loadDatabaseData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [
-        categoriesRes,
-        heroBannersRes,
-        promosRes,
-        reviewsRes,
-        sareesRes,
-        kurtisRes,
-        bagsRes,
-        initialProductsRes,
-      ] = await Promise.all([
+      // 1. Critical above-the-fold content first (Hero slider & Category bar)
+      const [categoriesRes, heroBannersRes, promosRes] = await Promise.allSettled([
         fetchCategories(),
         fetchBanners("hero"),
         fetchBanners("promo"),
-        fetchReviews(),
-        fetchProducts({ categorySlug: "saree", limit: 10 }), // 2 rows of sarees
-        fetchProducts({ categorySlug: "salwar-kameez", limit: 10 }), // 2 rows of kurtis
-        fetchProducts({ categorySlug: "bags", limit: 10 }), // 2 rows of bags
-        fetchProducts({ limit: 16 }), // initial catalog page
       ]);
 
-      if (categoriesRes) setCategories(categoriesRes);
-      if (heroBannersRes) setHeroSlides(heroBannersRes);
-      if (promosRes) setPromoBanners(promosRes);
-      if (reviewsRes) setReviews(reviewsRes);
-      if (sareesRes?.products) setSareeProducts(sareesRes.products);
-      if (kurtisRes?.products) setKurtiProducts(kurtisRes.products);
-      if (bagsRes?.products) setBagProducts(bagsRes.products);
-      if (initialProductsRes?.products) setProducts(initialProductsRes.products);
+      if (categoriesRes.status === "fulfilled" && categoriesRes.value?.length) {
+        setCategories(categoriesRes.value);
+      }
+      if (heroBannersRes.status === "fulfilled" && heroBannersRes.value?.length) {
+        setHeroSlides(heroBannersRes.value);
+      }
+      if (promosRes.status === "fulfilled" && promosRes.value?.length) {
+        setPromoBanners(promosRes.value);
+      }
+
+      // 2. Product showcases & reviews (rendered independently so one never blocks another)
+      const [sareesRes, kurtisRes, bagsRes, initialProductsRes, reviewsRes] = await Promise.allSettled([
+        fetchProducts({ categorySlug: "saree", limit: 10 }),
+        fetchProducts({ categorySlug: "salwar-kameez", limit: 10 }),
+        fetchProducts({ categorySlug: "bags", limit: 10 }),
+        fetchProducts({ limit: 16 }),
+        fetchReviews(),
+      ]);
+
+      if (sareesRes.status === "fulfilled" && sareesRes.value?.products?.length) {
+        setSareeProducts(sareesRes.value.products);
+      }
+      if (kurtisRes.status === "fulfilled" && kurtisRes.value?.products?.length) {
+        setKurtiProducts(kurtisRes.value.products);
+      }
+      if (bagsRes.status === "fulfilled" && bagsRes.value?.products?.length) {
+        setBagProducts(bagsRes.value.products);
+      }
+      if (initialProductsRes.status === "fulfilled" && initialProductsRes.value?.products?.length) {
+        setProducts(initialProductsRes.value.products);
+      }
+      if (reviewsRes.status === "fulfilled" && reviewsRes.value?.length) {
+        setReviews(reviewsRes.value);
+      }
     } catch (err) {
       console.error("Failed to fetch initial data from database:", err);
     } finally {

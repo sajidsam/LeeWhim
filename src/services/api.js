@@ -30,9 +30,9 @@ const setClientCache = (key, data, ttlMs = CLIENT_CACHE_TTL_MS) => {
 };
 
 /**
- * Robust fetcher with in-memory caching and content-type verification
+ * Robust fetcher with in-memory caching, content-type verification, and retry on serverless cold starts
  */
-const apiRequest = async (pathAndQuery, useCache = true) => {
+const apiRequest = async (pathAndQuery, useCache = true, retries = 1) => {
   const cleanPath = pathAndQuery.startsWith("/") ? pathAndQuery : `/${pathAndQuery}`;
 
   // 1. Check in-memory client cache
@@ -43,31 +43,39 @@ const apiRequest = async (pathAndQuery, useCache = true) => {
     }
   }
 
-  // 2. Fetch using configured PRIMARY_URL
+  // 2. Fetch using configured PRIMARY_URL with automatic retry for cold starts
   const targetUrl = `${PRIMARY_URL}${cleanPath}`;
-  const res = await fetch(targetUrl, {
-    headers: {
-      Accept: "application/json",
-    },
-  });
+  try {
+    const res = await fetch(targetUrl, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error(`Expected JSON response but received ${contentType}`);
+    }
+
+    const responseData = await res.json();
+
+    // Store in memory cache
+    if (useCache && responseData) {
+      setClientCache(cleanPath, responseData);
+    }
+
+    return responseData;
+  } catch (err) {
+    if (retries > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      return apiRequest(pathAndQuery, useCache, retries - 1);
+    }
+    throw err;
   }
-
-  const contentType = res.headers.get("content-type") || "";
-  if (!contentType.includes("application/json")) {
-    throw new Error(`Expected JSON response but received ${contentType}`);
-  }
-
-  const responseData = await res.json();
-
-  // 4. Store in memory cache
-  if (useCache && responseData) {
-    setClientCache(cleanPath, responseData);
-  }
-
-  return responseData;
 };
 
 /**

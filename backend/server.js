@@ -17,12 +17,31 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Attempt Database Connection if configured
-if (process.env.MONGODB_URI && !process.env.MONGODB_URI.includes("<CLUSTER_HOST>")) {
-  connectDB().catch((err) => {
-    console.warn("⚠️ Running in offline/fallback mode until database connection is established:", err.message);
+// Root URL Health & Info Route (Prevents 'Cannot GET /' in browser)
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Rongon Luxury Women Backend API is running smoothly",
+    timestamp: new Date().toISOString(),
   });
-}
+});
+
+// Serverless Database Connection Middleware:
+// Guarantees DB connection is active before processing any query, preventing 10s operation buffering timeouts
+app.use(async (req, res, next) => {
+  try {
+    if (process.env.MONGODB_URI && !process.env.MONGODB_URI.includes("<CLUSTER_HOST>")) {
+      await connectDB();
+    }
+    next();
+  } catch (err) {
+    console.error("Database connection middleware error:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Database connection failed: " + err.message,
+    });
+  }
+});
 
 // ==========================================
 // HIGH-SPEED IN-MEMORY CACHING LAYER
@@ -284,7 +303,12 @@ app.post("/api/orders", async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Rongon Luxury Backend API running at: http://localhost:${PORT}`);
-});
+// Start server when run directly (local development), or export app for Vercel Serverless
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Rongon Luxury Backend API running at: http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
+
