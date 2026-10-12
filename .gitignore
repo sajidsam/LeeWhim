@@ -26,3 +26,8 @@ dist-ssr
 # Node Modules
 node_modules/
 **/node_modules/
+
+# Environment Variables & Secrets (Industry Standard)
+.env
+.env.*
+!.env.example
