@@ -15,7 +15,7 @@ const PromoBanners = () => {
   };
 
   return (
-    <section className="py-10 sm:py-14 bg-[#EFE9E1]">
+    <section className="hidden sm:block py-10 sm:py-14 bg-[#EFE9E1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {PROMO_BANNERS.map((banner) => (

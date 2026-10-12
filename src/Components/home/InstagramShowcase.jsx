@@ -5,32 +5,32 @@ const InstagramShowcase = () => {
   const posts = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&q=80",
-      tag: "#LeesWhimBride",
+      image: "https://www.lerevecraze.com/wp-content/uploads/2026/10/3f9b121d-2c25-431c-ae1f-1b5d679d1928.jpg",
+      tag: "#SareeGrace",
       likes: "1.2k",
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80",
-      tag: "#KundanRoyalty",
+      image: "https://www.lerevecraze.com/wp-content/uploads/2026/10/99b9fc21-9f90-4d6c-bd88-572e1da42e4f.jpg",
+      tag: "#FestiveKameez",
       likes: "890",
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&q=80",
-      tag: "#BanarasiSilk",
+      image: "https://www.lerevecraze.com/wp-content/uploads/2026/10/a44e732d-5913-4883-b51f-eb745b7999d8.jpg",
+      tag: "#RongonWomen",
       likes: "2.1k",
     },
     {
       id: 4,
-      image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=500&q=80",
-      tag: "#JhumkaLove",
+      image: "https://www.lerevecraze.com/wp-content/uploads/2026/09/76b32887-971a-4081-a091-062d5e74ec28.jpg",
+      tag: "#EthnicElegance",
       likes: "740",
     },
     {
       id: 5,
-      image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=500&q=80",
-      tag: "#OrganzaElegance",
+      image: "https://www.lerevecraze.com/wp-content/uploads/2026/10/ab56c44e-fe12-4909-a453-c843ceddff64.jpg",
+      tag: "#ChicFusion",
       likes: "1.5k",
     },
   ];
@@ -44,10 +44,10 @@ const InstagramShowcase = () => {
               Community & Styling
             </span>
             <h2 className="text-xl sm:text-2xl font-bold font-serif-luxury text-[#322D29] mt-1">
-              Styled by You #LeesWhim
+              Styled by You #Rongon
             </h2>
             <p className="text-xs text-[#AC9C8D] mt-0.5">
-              Tag @leeswhim on Instagram to be featured in our royal gallery
+              Tag @rongon on Instagram to be featured in our royal gallery
             </p>
           </div>
           <a
@@ -59,7 +59,7 @@ const InstagramShowcase = () => {
             <svg className="w-4 h-4 fill-current text-[#72383D]" viewBox="0 0 24 24">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
             </svg>
-            <span>Follow @leeswhim</span>
+            <span>Follow @rongon</span>
           </a>
         </div>
 

@@ -7,8 +7,14 @@ export const ShopProvider = ({ children }) => {
   // Cart State (saved to localStorage for real experience)
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem("leeswhim_cart");
-      return saved ? JSON.parse(saved) : [
+      const saved = localStorage.getItem("rongon_cart") || localStorage.getItem("leeswhim_cart");
+      if (saved && !saved.includes("shopify")) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.product?.image?.includes("lerevecraze")) {
+          return parsed;
+        }
+      }
+      return [
         { product: PRODUCTS[0], quantity: 1, selectedColor: PRODUCTS[0].colors[0] },
         { product: PRODUCTS[1], quantity: 1, selectedColor: PRODUCTS[1].colors[0] },
       ];
@@ -23,10 +29,10 @@ export const ShopProvider = ({ children }) => {
   // Wishlist State
   const [wishlist, setWishlist] = useState(() => {
     try {
-      const saved = localStorage.getItem("leeswhim_wishlist");
-      return saved ? JSON.parse(saved) : [PRODUCTS[0].id, PRODUCTS[3].id];
+      const saved = localStorage.getItem("rongon_wishlist") || localStorage.getItem("leeswhim_wishlist");
+      return saved ? JSON.parse(saved) : [PRODUCTS[0].id, PRODUCTS[2].id];
     } catch {
-      return [PRODUCTS[0].id, PRODUCTS[3].id];
+      return [PRODUCTS[0].id, PRODUCTS[2].id];
     }
   });
 
@@ -43,7 +49,7 @@ export const ShopProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem("leeswhim_cart", JSON.stringify(cart));
+      localStorage.setItem("rongon_cart", JSON.stringify(cart));
     } catch (e) {
       console.error(e);
     }
@@ -51,7 +57,7 @@ export const ShopProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem("leeswhim_wishlist", JSON.stringify(wishlist));
+      localStorage.setItem("rongon_wishlist", JSON.stringify(wishlist));
     } catch (e) {
       console.error(e);
     }

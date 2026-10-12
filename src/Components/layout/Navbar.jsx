@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useShop } from "../../Context/ShopContext";
 import { CATEGORIES } from "../../data/mockProducts";
 import logo from "@/assets/logo.png";
@@ -9,8 +9,22 @@ import {
   ShoppingBag,
   User,
   Phone,
-  Sparkles,
+  ArrowRight,
+  ChevronRight,
+  ChevronLeft,
+  ChevronDown,
 } from "lucide-react";
+
+const SHORT_NAMES = {
+  "salwar-kameez": "Salwar Kameez",
+  "saree": "Sarees",
+  "kameez": "Kameez",
+  "tunic": "Tunics",
+  "tops": "Tops",
+  "shirt": "Shirts",
+  "shrug": "Shrugs",
+  "bottom-wear": "Bottoms",
+};
 
 const Navbar = () => {
   const {
@@ -23,6 +37,14 @@ const Navbar = () => {
     setActiveCategoryFilter,
     showToast,
   } = useShop();
+
+  const navScrollRef = useRef(null);
+
+  const scrollNav = (offset) => {
+    if (navScrollRef.current) {
+      navScrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+    }
+  };
 
   const handleCategoryClick = (slug) => {
     setActiveCategoryFilter(slug);
@@ -40,7 +62,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-[#AC9C8D] animate-pulse"></span>
             <p className="font-medium truncate tracking-wide">
-              Free Nationwide Delivery in Bangladesh on orders over ৳2,500 | 100% Authentic Handloom
+              Free Nationwide Delivery in Bangladesh on orders over ৳2,500 | Authentic Rongon Luxury Collection
             </p>
           </div>
           <div className="hidden sm:flex items-center gap-4 text-[#D1C7BD]">
@@ -72,12 +94,12 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Logo - User's authentic Lee's Whim logo */}
+          {/* Logo - Authentic Rongon logo */}
           <div className="flex items-center">
             <a href="/" className="inline-block group py-1">
               <img
                 src={logo}
-                alt="Lee's Whim Logo"
+                alt="Rongon Logo"
                 className="h-16 sm:h-20 max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </a>
@@ -92,7 +114,7 @@ const Navbar = () => {
             >
               <span className="flex items-center gap-2.5 text-[#AC9C8D] font-medium">
                 <Search className="w-4 h-4 text-[#72383D]" />
-                Search Jamdani, Banarasi, Kundan chokers...
+                Search Salwar Kameez, Sarees, Kameez, Tunics...
               </span>
               <kbd className="px-2 py-0.5 text-[10px] bg-[#EFE9E1] rounded-md text-[#322D29] font-mono">
                 ⌘K
@@ -170,46 +192,56 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Desktop Secondary Category Navigation Bar */}
-      <div className="hidden lg:block bg-white/70">
-        <div className="max-w-7xl mx-auto px-8">
-          <ul className="flex items-center justify-between text-xs font-medium text-[#322D29] py-2.5">
-            <li>
-              <button
-                type="button"
-                onClick={() => handleCategoryClick("all")}
-                className="flex items-center gap-1.5 text-[#72383D] font-bold hover:text-[#322D29] transition-colors"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
-                All Collections
-              </button>
-            </li>
+      {/* Desktop Secondary Category Navigation Bar - Clean, Arrow-Navigated & Reduced Text */}
+      <div className="hidden lg:block bg-white/85 border-t border-[#EFE9E1]">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-3 py-2">
+          {/* Left Arrow Button */}
+          <button
+            type="button"
+            onClick={() => scrollNav(-180)}
+            aria-label="Scroll categories left"
+            className="w-7 h-7 rounded-full flex items-center justify-center text-[#AC9C8D] hover:text-[#72383D] hover:bg-[#EFE9E1] transition-colors shrink-0"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          {/* Categories Nav Container */}
+          <div
+            ref={navScrollRef}
+            className="flex-1 flex items-center justify-center gap-7 overflow-x-auto scrollbar-hide py-1 scroll-smooth"
+          >
+            <button
+              type="button"
+              onClick={() => handleCategoryClick("all")}
+              className="flex items-center gap-1 text-xs font-bold text-[#72383D] hover:text-[#322D29] transition-colors py-1 shrink-0 group"
+            >
+              <span>All</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+
             {CATEGORIES.map((cat) => (
-              <li key={cat.id}>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick(cat.slug)}
-                  className="hover:text-[#72383D] transition-colors py-1 relative group flex items-center gap-1"
-                >
-                  <span>{cat.name}</span>
-                  {cat.badge && (
-                    <span className="text-[9px] px-1.5 py-0.2 bg-[#EFE9E1] text-[#72383D] rounded-full font-semibold">
-                      {cat.badge}
-                    </span>
-                  )}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72383D] transition-all duration-300 group-hover:w-full" />
-                </button>
-              </li>
-            ))}
-            <li>
-              <a
-                href="#reviews-section"
-                className="text-[#AC9C8D] hover:text-[#72383D] transition-colors"
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => handleCategoryClick(cat.slug)}
+                className="hover:text-[#72383D] text-xs font-medium text-[#322D29] transition-colors py-1 relative group flex items-center gap-1 shrink-0"
               >
-                Client Reviews
-              </a>
-            </li>
-          </ul>
+                <span>{SHORT_NAMES[cat.slug] || cat.name}</span>
+                <ChevronDown className="w-3 h-3 text-[#AC9C8D] group-hover:text-[#72383D] group-hover:translate-y-0.5 transition-all" />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72383D] transition-all duration-300 group-hover:w-full" />
+              </button>
+            ))}
+          </div>
+
+          {/* Right Arrow Button */}
+          <button
+            type="button"
+            onClick={() => scrollNav(180)}
+            aria-label="Scroll categories right"
+            className="w-7 h-7 rounded-full flex items-center justify-center text-[#AC9C8D] hover:text-[#72383D] hover:bg-[#EFE9E1] transition-colors shrink-0"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </header>

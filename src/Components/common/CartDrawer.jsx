@@ -31,11 +31,11 @@ const CartDrawer = () => {
   const handleApplyCoupon = (e) => {
     e.preventDefault();
     const clean = coupon.trim().toUpperCase();
-    if (clean === "LEESWHIM" || clean === "EID2026" || clean === "WELCOME10") {
+    if (clean === "RONGON" || clean === "EID2026" || clean === "WELCOME10") {
       setDiscountPercent(10);
       showToast("Coupon applied! 10% discount added 🎉", "info");
     } else {
-      showToast("Invalid coupon code. Try: LEESWHIM", "info");
+      showToast("Invalid coupon code. Try: RONGON", "info");
     }
   };
 
@@ -99,7 +99,7 @@ const CartDrawer = () => {
                 </div>
                 <h3 className="text-base font-bold text-[#322D29] mb-1">Your bag is empty</h3>
                 <p className="text-xs text-[#AC9C8D] max-w-xs mb-6">
-                  Explore our exclusive collection of Dhakai Jamdanis, Banarasi Silks and royal Kundan jewellery!
+                  Explore our exclusive Rongon collection of Salwar Kameez, Sarees, Kameez, and contemporary fusion wear!
                 </p>
                 <button
                   type="button"
@@ -179,7 +179,7 @@ const CartDrawer = () => {
               <form onSubmit={handleApplyCoupon} className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Coupon (try: LEESWHIM)"
+                  placeholder="Coupon (try: RONGON)"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
                   className="flex-1 px-3 py-2 text-xs bg-white rounded-lg focus:outline-none text-[#322D29] placeholder-[#AC9C8D] uppercase"
@@ -218,7 +218,7 @@ const CartDrawer = () => {
               <button
                 type="button"
                 onClick={() => {
-                  alert(`Thank you for choosing Lee's Whim! Your demo order of ৳${finalTotal.toLocaleString()} has been received for Cash on Delivery.`);
+                  alert(`Thank you for choosing Rongon! Your demo order of ৳${finalTotal.toLocaleString()} has been received for Cash on Delivery.`);
                   setIsCartOpen(false);
                 }}
                 className="w-full py-3 bg-[#72383D] hover:bg-[#322D29] text-[#EFE9E1] font-semibold text-xs sm:text-sm rounded-xl transition-all duration-200 shadow-md flex items-center justify-center gap-2 active:scale-98"

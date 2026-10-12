@@ -38,7 +38,7 @@ const MobileDrawer = () => {
         {/* Drawer Header */}
         <div className="p-4 flex items-center justify-between bg-[#EFE9E1]">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="Lee's Whim" className="h-12 w-auto object-contain" />
+            <img src={logo} alt="Rongon" className="h-12 w-auto object-contain" />
           </div>
           <button
             type="button"
@@ -60,7 +60,7 @@ const MobileDrawer = () => {
             className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs bg-white rounded-xl text-[#AC9C8D] hover:text-[#322D29] shadow-2xs transition-colors"
           >
             <Search className="w-4 h-4 text-[#72383D]" />
-            <span>Search Sarees & Jewellery...</span>
+            <span>Search Women's Collection...</span>
           </button>
         </div>
 
@@ -143,7 +143,7 @@ const MobileDrawer = () => {
 
         {/* Footer info */}
         <div className="p-4 bg-[#EFE9E1] text-[11px] text-[#322D29] text-center">
-          <p className="font-semibold">© 2026 Lee's Whim Luxury Atelier</p>
+          <p className="font-semibold">© 2026 Rongon Luxury Atelier</p>
           <p className="text-[#72383D] font-medium mt-0.5">Cash on Delivery Across Bangladesh</p>
         </div>
       </div>

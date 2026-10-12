@@ -15,6 +15,8 @@ const CatalogSection = () => {
     if (activeCategoryFilter !== "all") {
       result = result.filter(
         (p) =>
+          (p.categorySlug && p.categorySlug.toLowerCase() === activeCategoryFilter.toLowerCase()) ||
+          p.subCategory.toLowerCase().replace(/[\s&]+/g, '-').includes(activeCategoryFilter.toLowerCase()) ||
           p.subCategory.toLowerCase().includes(activeCategoryFilter.toLowerCase()) ||
           p.category.toLowerCase().includes(activeCategoryFilter.toLowerCase())
       );
@@ -41,14 +43,11 @@ const CatalogSection = () => {
               <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
               <span>Full Boutique Catalogue</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-[#322D29] mt-1">
-              Curated Sarees & Royal Jewellery
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-serif-luxury text-[#322D29] mt-1">
+              Rongon Women Collection
             </h2>
             <p className="text-xs sm:text-sm text-[#AC9C8D] mt-1 max-w-xl">
-              Showing authentic Dhakai Jamdanis, Katan silk and 22K gold-plated Kundan jewellery.
-              <span className="block text-[11px] text-[#72383D] font-medium mt-0.5">
-                (Temporary preview data — seamlessly syncs with your database later)
-              </span>
+              Showing exclusive Salwar Kameez, designer cotton sarees, single kameez, and contemporary fusion wear.
             </p>
           </div>
 
@@ -78,11 +77,10 @@ const CatalogSection = () => {
           <button
             type="button"
             onClick={() => setActiveCategoryFilter("all")}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${
-              activeCategoryFilter === "all"
+            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${activeCategoryFilter === "all"
                 ? "bg-[#72383D] text-[#EFE9E1] shadow-xs"
                 : "bg-white text-[#322D29] hover:bg-white/80"
-            }`}
+              }`}
           >
             All Collections ({PRODUCTS.length})
           </button>
@@ -93,11 +91,10 @@ const CatalogSection = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategoryFilter(cat.slug)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${
-                  isSelected
+                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 ${isSelected
                     ? "bg-[#72383D] text-[#EFE9E1] shadow-xs"
                     : "bg-white text-[#322D29] hover:bg-white/80"
-                }`}
+                  }`}
               >
                 {cat.name}
               </button>

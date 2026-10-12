@@ -62,35 +62,25 @@ const QuickViewModal = () => {
               alt={product.name}
               className="w-full h-full object-cover object-center transition-all duration-300"
             />
-            {product.discount && (
-              <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold bg-[#72383D] text-[#EFE9E1] rounded-full">
-                {product.discount}
-              </span>
-            )}
           </div>
 
           {/* Thumbnail preview list */}
-          <div className="flex gap-2.5 mt-3 overflow-x-auto pb-1">
-            <button
-              type="button"
-              onClick={() => setActiveImage(product.image)}
-              className={`w-14 h-14 rounded-xl overflow-hidden transition-all ${
-                displayImage === product.image ? "ring-2 ring-[#72383D] scale-105" : "opacity-70 hover:opacity-100"
-              }`}
-            >
-              <img src={product.image} alt="Thumbnail 1" className="w-full h-full object-cover" />
-            </button>
-            {product.hoverImage && (
+          <div className="flex gap-2.5 mt-3 overflow-x-auto pb-1 scrollbar-hide">
+            {(product.galleryImages && product.galleryImages.length > 0
+              ? product.galleryImages
+              : [product.image, product.hoverImage].filter(Boolean)
+            ).slice(0, 6).map((imgUrl, idx) => (
               <button
+                key={idx}
                 type="button"
-                onClick={() => setActiveImage(product.hoverImage)}
-                className={`w-14 h-14 rounded-xl overflow-hidden transition-all ${
-                  displayImage === product.hoverImage ? "ring-2 ring-[#72383D] scale-105" : "opacity-70 hover:opacity-100"
+                onClick={() => setActiveImage(imgUrl)}
+                className={`w-14 h-14 rounded-xl shrink-0 overflow-hidden transition-all ${
+                  displayImage === imgUrl ? "ring-2 ring-[#72383D] scale-105" : "opacity-70 hover:opacity-100"
                 }`}
               >
-                <img src={product.hoverImage} alt="Thumbnail 2" className="w-full h-full object-cover" />
+                <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
               </button>
-            )}
+            ))}
           </div>
         </div>
 
@@ -154,11 +144,10 @@ const QuickViewModal = () => {
                       key={color}
                       type="button"
                       onClick={() => setSelectedColor(color)}
-                      className={`px-3 py-1.5 text-xs rounded-xl font-medium transition-all ${
-                        currentColor === color
+                      className={`px-3 py-1.5 text-xs rounded-xl font-medium transition-all ${currentColor === color
                           ? "bg-[#72383D] text-[#EFE9E1] font-semibold"
                           : "bg-[#EFE9E1] text-[#322D29] hover:bg-[#D1C7BD]"
-                      }`}
+                        }`}
                     >
                       {color}
                     </button>

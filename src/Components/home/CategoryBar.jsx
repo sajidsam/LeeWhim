@@ -23,7 +23,7 @@ const CategoryBar = () => {
               EXPLORE CURATIONS
             </h2>
             <p className="text-xs text-[#AC9C8D]">
-              Hand-picked heritage weaves and royal jewellery collections
+              Hand-picked Rongon women categories and signature styles
             </p>
           </div>
           <button
@@ -41,15 +41,13 @@ const CategoryBar = () => {
           <button
             type="button"
             onClick={() => handleSelect("all")}
-            className={`group flex flex-col items-center shrink-0 p-2 rounded-2xl transition-all duration-200 ${
-              activeCategoryFilter === "all"
+            className={`group flex flex-col items-center shrink-0 p-2 rounded-2xl transition-all duration-200 ${activeCategoryFilter === "all"
                 ? "bg-[#EFE9E1] scale-105"
                 : "hover:bg-[#EFE9E1]/60"
-            }`}
+              }`}
           >
-            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center font-bold text-xs shadow-xs group-hover:scale-105 transition-transform ${
-              activeCategoryFilter === "all" ? "bg-[#72383D] text-[#EFE9E1]" : "bg-[#322D29] text-[#EFE9E1]"
-            }`}>
+            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center font-bold text-xs shadow-xs group-hover:scale-105 transition-transform ${activeCategoryFilter === "all" ? "bg-[#72383D] text-[#EFE9E1]" : "bg-[#322D29] text-[#EFE9E1]"
+              }`}>
               <span>ALL</span>
             </div>
             <span className="text-[11px] sm:text-xs font-bold text-[#322D29] mt-2">
@@ -64,11 +62,10 @@ const CategoryBar = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => handleSelect(cat.slug)}
-                className={`group flex flex-col items-center shrink-0 p-2 rounded-2xl transition-all duration-200 ${
-                  isSelected
+                className={`group flex flex-col items-center shrink-0 p-2 rounded-2xl transition-all duration-200 ${isSelected
                     ? "bg-[#EFE9E1] scale-105"
                     : "hover:bg-[#EFE9E1]/60"
-                }`}
+                  }`}
               >
                 <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform bg-[#EFE9E1]">
                   <img

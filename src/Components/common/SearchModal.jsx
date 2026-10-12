@@ -21,7 +21,7 @@ const SearchModal = () => {
 
   if (!isSearchOpen) return null;
 
-  const popularSearches = ["Jamdani Saree", "Kundan Choker", "Banarasi Silk", "Jhumkas", "Organza", "Bridal Set"];
+  const popularSearches = ["Salwar Kameez", "Cotton Saree", "Crepe Kameez", "Joom A-line", "Tunics", "Printed Saree"];
 
   const handleSelectProduct = (product) => {
     setQuickViewProduct(product);
@@ -45,7 +45,7 @@ const SearchModal = () => {
           <Search className="w-5 h-5 text-[#72383D] shrink-0" />
           <input
             type="text"
-            placeholder="Search Sarees, Kundan Jewellery, Silk..."
+            placeholder="Search Salwar Kameez, Cotton Sarees, Kameez, Tunics..."
             value={searchTerm}
             autoFocus
             onChange={(e) => setSearchTerm(e.target.value)}

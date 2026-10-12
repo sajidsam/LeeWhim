@@ -10,8 +10,8 @@ const TrustBadges = () => {
     },
     {
       icon: ShieldCheck,
-      title: "100% Authentic Handloom",
-      description: "Certified Dhakai Jamdani & 22K micron plated jewellery",
+      title: "100% Authentic Quality",
+      description: "Certified pure fabrics, intricate embroidery & royal craftsmanship",
     },
     {
       icon: RefreshCw,

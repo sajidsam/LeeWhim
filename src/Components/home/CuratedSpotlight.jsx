@@ -11,7 +11,7 @@ const CuratedSpotlight = () => {
   const spotlightProducts = PRODUCTS.slice(0, 6);
 
   const handleSpotlightCta = () => {
-    setActiveCategoryFilter("jamdani");
+    setActiveCategoryFilter("salwar-kameez");
     const target = document.getElementById("catalog-section");
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
@@ -26,13 +26,13 @@ const CuratedSpotlight = () => {
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#72383D]">
               <Sparkles className="w-3.5 h-3.5 text-[#AC9C8D]" />
-              <span>Artisan Showcase</span>
+              <span>Women Collection Showcase</span>
             </div>
             <h2 className="text-xl sm:text-3xl font-bold font-serif-luxury text-[#322D29] mt-1">
               Festive Heritage Spotlight
             </h2>
             <p className="text-xs sm:text-sm text-[#AC9C8D] mt-1">
-              Pure handwoven masterpieces and royal polki jewellery crafted for celebration
+              Signature Rongon Salwar Kameez, luxury sarees and contemporary ethnic drapes
             </p>
           </div>
           <button
@@ -50,8 +50,8 @@ const CuratedSpotlight = () => {
           {/* Big Spotlight Visual Card (Col 1 on desktop) - Borderless */}
           <div className="lg:col-span-1 relative rounded-3xl overflow-hidden shadow-md min-h-[360px] lg:min-h-full flex flex-col justify-end p-6 bg-[#322D29] group">
             <img
-              src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85"
-              alt="Artisan Saree Spotlight"
+              src="https://www.lerevecraze.com/wp-content/uploads/2026/08/0935b3ac-d2cb-469b-ad55-5ba018c3a85e.jpg"
+              alt="Rongon Festive Spotlight"
               className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-75"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#322D29] via-[#322D29]/40 to-transparent" />
@@ -61,10 +61,10 @@ const CuratedSpotlight = () => {
                 LIMITED EDITION
               </span>
               <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury leading-snug">
-                The Royal Jamdani Heirloom
+                Festive Silk & Viscose Suite
               </h3>
               <p className="text-xs text-[#D1C7BD] line-clamp-3">
-                Woven over 90 days with 100-count fine muslin cotton and pure gilded zari. A true family treasure.
+                Crafted with rich silk blends, karchupi hand embellishments and regal silhouettes designed for unforgettable celebrations.
               </p>
               <div className="pt-2">
                 <button
@@ -72,7 +72,7 @@ const CuratedSpotlight = () => {
                   onClick={handleSpotlightCta}
                   className="w-full py-2.5 bg-[#EFE9E1] text-[#322D29] text-xs font-bold rounded-xl hover:bg-[#72383D] hover:text-[#EFE9E1] transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                 >
-                  <span>Explore Jamdani</span>
+                  <span>Explore Salwar Kameez</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

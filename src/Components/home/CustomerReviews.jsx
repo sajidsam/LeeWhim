@@ -15,7 +15,7 @@ const CustomerReviews = () => {
             Loved by Connoisseurs Across Bangladesh
           </h2>
           <p className="text-xs sm:text-sm text-[#AC9C8D] mt-2">
-            Real feedback from women who chose Lee's Whim for their weddings, Eid, and special occasions
+            Real feedback from women who chose Rongon for their weddings, Eid, and special occasions
           </p>
         </div>
 
