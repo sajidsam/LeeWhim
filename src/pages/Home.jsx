@@ -2,7 +2,8 @@ import React from "react";
 import HeroSlider from "../Components/home/HeroSlider";
 import CategoryBar from "../Components/home/CategoryBar";
 import TrustBadges from "../Components/home/TrustBadges";
-import CuratedSpotlight from "../Components/home/CuratedSpotlight";
+import SareeRowSection from "../Components/home/SareeRowSection";
+import KurtiRowSection from "../Components/home/KurtiRowSection";
 import PromoBanners from "../Components/home/PromoBanners";
 import BagsRowSection from "../Components/home/BagsRowSection";
 import CatalogSection from "../Components/home/CatalogSection";
@@ -12,31 +13,34 @@ import InstagramShowcase from "../Components/home/InstagramShowcase";
 const Home = () => {
   return (
     <div className="w-full flex flex-col min-h-screen">
-      {/* Hero Carousel Slider */}
+      {/* 1. Hero Carousel Slider */}
       <HeroSlider />
 
-      {/* Quick Category Bar */}
+      {/* 2. Quick Category Bar */}
       <CategoryBar />
 
-      {/* Trust & Guarantee Badges */}
+      {/* 3. Trust & Guarantee Badges */}
       <TrustBadges />
 
-      {/* Signature MorshedMart Spotlight (1 Large Feature + 6 Products) */}
-      <CuratedSpotlight />
+      {/* 4. Saree 2-Row Showcase */}
+      <SareeRowSection />
 
-      {/* Dual Promotion Banners */}
+      {/* 5. Kurti & Salwar Kameez 2-Row Showcase */}
+      <KurtiRowSection />
+
+      {/* 6. Dual Promotion Banners */}
       <PromoBanners />
 
-      {/* Dedicated 1-Row Women Bags & Crossbody Showcase */}
+      {/* 7. Women Bags & Crossbody (Only 2 Rows) */}
       <BagsRowSection />
 
-      {/* Complete Responsive Product Catalog (sm: 2 cols, md: 3 cols, lg: 4/5 cols) */}
+      {/* 8. Full Product Catalog with Pagination & Caching */}
       <CatalogSection />
 
-      {/* Social Proof & Customer Reviews */}
+      {/* 9. Social Proof & Customer Reviews */}
       <CustomerReviews />
 
-      {/* Instagram Community Styling Grid */}
+      {/* 10. Instagram Community Styling Grid */}
       <InstagramShowcase />
     </div>
   );

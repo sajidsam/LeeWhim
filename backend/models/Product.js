@@ -170,6 +170,11 @@ const productSchema = new mongoose.Schema(
       default: true,
       index: true,
     },
+    featuredOrder: {
+      type: Number,
+      default: 9999,
+      index: true,
+    },
   },
   {
     timestamps: true,

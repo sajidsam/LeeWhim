@@ -33,7 +33,7 @@ const CustomerReviews = () => {
                 key={review.id}
                 className="p-6 rounded-3xl bg-[#EFE9E1]/60 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative"
               >
-                <Quote className="w-8 h-8 text-[#D1C7BD] absolute top-5 right-5" />
+                <Quote className="w-8 h-8 text-[#72383D] absolute top-5 right-5" />
 
                 <div>
                   {/* Rating Stars in #72383D */}

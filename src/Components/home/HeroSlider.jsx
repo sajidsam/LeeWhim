@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useShop } from "../../Context/ShopContext";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from "lucide-react";
+import banner1 from "@/assets/banner.png";
+import banner2 from "@/assets/banner2.png";
+import banner3 from "@/assets/banner3.png";
+
+const BANNER_ASSETS = {
+  "slide-1": banner1,
+  "slide-2": banner2,
+  "slide-3": banner3,
+};
 
 const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -67,30 +76,35 @@ const HeroSlider = () => {
       {/* Slides Container */}
       {slides.map((slide, index) => {
         const isActive = index === currentSlide;
+        const bannerKey = slide.bannerId || slide.id;
+        const slideImg = BANNER_ASSETS[bannerKey] || slide.image;
+        const isSlide3 = bannerKey === "slide-3";
+        const isSlide2 = bannerKey === "slide-2";
+
         return (
           <div
-            key={slide.id}
+            key={slide.id || slide.bannerId || index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
               }`}
           >
             {/* Background Image with Zoom animation */}
             <div className="absolute inset-0 overflow-hidden bg-[#72383D]">
               <img
-                src={slide.image}
+                src={slideImg}
                 alt={slide.title}
                 className={`w-full h-full object-cover transition-transform duration-7000 ease-out ${
-                  slide.isCustomBanner
+                  slide.isCustomBanner || BANNER_ASSETS[bannerKey]
                     ? "object-[80%_center] sm:object-[75%_center] lg:object-right"
                     : "object-center"
                 } ${isActive ? "scale-103" : "scale-100"}`}
               />
               {/* Luxury Gradient Overlay */}
-              {slide.id === "slide-3" ? (
+              {isSlide3 ? (
                 <>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0C1A30]/95 via-[#0C1A30]/65 to-transparent sm:from-[#0C1A30]/90 sm:via-[#0C1A30]/40 lg:from-[#0C1A30]/80 lg:via-transparent lg:to-transparent" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0C1A30]/60 via-transparent to-transparent sm:hidden" />
                 </>
-              ) : slide.id === "slide-2" ? (
+              ) : isSlide2 ? (
                 <>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#241715]/95 via-[#241715]/65 to-transparent sm:from-[#241715]/90 sm:via-[#241715]/40 lg:from-[#241715]/80 lg:via-transparent lg:to-transparent" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#241715]/60 via-transparent to-transparent sm:hidden" />

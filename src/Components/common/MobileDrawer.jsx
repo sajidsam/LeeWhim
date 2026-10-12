@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useShop } from "../../Context/ShopContext";
 import { X, Search, Phone, Sparkles, MessageCircle, ChevronRight, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -7,12 +7,26 @@ const MobileDrawer = () => {
   const {
     isMobileMenuOpen,
     setIsMobileMenuOpen,
-    setIsSearchOpen,
+    setSearchQuery,
     setActiveCategoryFilter,
     categories = [],
   } = useShop();
 
+  const [drawerSearch, setDrawerSearch] = useState("");
+
   if (!isMobileMenuOpen) return null;
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (drawerSearch.trim()) {
+      setSearchQuery(drawerSearch.trim());
+      setIsMobileMenuOpen(false);
+      const target = document.getElementById("catalog-section");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   const handleSelectCategory = (slug) => {
     setActiveCategoryFilter(slug);
@@ -49,20 +63,35 @@ const MobileDrawer = () => {
           </button>
         </div>
 
-        {/* Quick Search Bar - Borderless */}
-        <div className="p-3 bg-[#EFE9E1]/40">
-          <button
-            type="button"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              setIsSearchOpen(true);
-            }}
-            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs bg-white rounded-xl text-[#AC9C8D] hover:text-[#322D29] shadow-2xs transition-colors"
-          >
-            <Search className="w-4 h-4 text-[#72383D]" />
-            <span>Search Women's Collection...</span>
-          </button>
-        </div>
+        {/* Direct Search Bar - No Modal */}
+        <form onSubmit={handleSearchSubmit} className="p-3 bg-[#EFE9E1]/40 border-b border-[#EFE9E1]">
+          <div className="relative flex items-center">
+            <input
+              type="text"
+              value={drawerSearch}
+              onChange={(e) => setDrawerSearch(e.target.value)}
+              placeholder="Search Salwar Kameez, Sarees..."
+              className="w-full pl-9 pr-8 py-2.5 text-xs bg-white text-[#322D29] rounded-xl outline-none placeholder-[#AC9C8D] shadow-2xs focus:ring-2 focus:ring-[#72383D]/20 transition-all"
+            />
+            <button
+              type="submit"
+              aria-label="Submit search"
+              className="absolute left-2.5 text-[#72383D] hover:scale-110 transition-transform"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+            {drawerSearch && (
+              <button
+                type="button"
+                onClick={() => setDrawerSearch("")}
+                aria-label="Clear search"
+                className="absolute right-2.5 text-[#AC9C8D] hover:text-[#322D29]"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </form>
 
         {/* Categories List */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">

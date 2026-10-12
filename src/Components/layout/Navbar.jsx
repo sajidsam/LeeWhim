@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useShop } from "../../Context/ShopContext";
+import { fetchProducts } from "../../services/api";
 import logo from "@/assets/logo.png";
 import {
   Menu,
@@ -12,6 +13,9 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
+  X,
+  Star,
+  Loader2,
 } from "lucide-react";
 
 const SHORT_NAMES = {
@@ -33,13 +37,98 @@ const Navbar = () => {
     wishlistCount,
     setIsCartOpen,
     setIsMobileMenuOpen,
-    setIsSearchOpen,
     setActiveCategoryFilter,
     showToast,
+    searchQuery,
+    setSearchQuery,
+    setQuickViewProduct,
     categories = [],
   } = useShop();
 
+  const [navSearchInput, setNavSearchInput] = useState(searchQuery || "");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileSearchExpanded, setIsMobileSearchExpanded] = useState(false);
+
   const navScrollRef = useRef(null);
+  const searchContainerRef = useRef(null);
+
+  // Sync nav search input when global searchQuery changes (e.g. cleared in catalog)
+  useEffect(() => {
+    setNavSearchInput(searchQuery || "");
+  }, [searchQuery]);
+
+  // Click outside listener to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Debounced live search preview for dropdown
+  useEffect(() => {
+    if (!navSearchInput || navSearchInput.trim().length < 2) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await fetchProducts({
+          search: navSearchInput.trim(),
+          limit: 5,
+        });
+        if (res?.products) {
+          setSearchResults(res.products);
+        }
+      } catch (err) {
+        console.error("Live search preview error:", err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 280);
+
+    return () => clearTimeout(timer);
+  }, [navSearchInput]);
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    const query = navSearchInput.trim();
+    setSearchQuery(query);
+    setIsDropdownOpen(false);
+    setIsMobileSearchExpanded(false);
+
+    const catalog = document.getElementById("catalog-section");
+    if (catalog) {
+      catalog.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleClearSearch = () => {
+    setNavSearchInput("");
+    setSearchResults([]);
+    setIsDropdownOpen(false);
+    if (searchQuery) {
+      setSearchQuery("");
+    }
+  };
+
+  const handleSelectDropdownProduct = (product) => {
+    setQuickViewProduct(product);
+    setIsDropdownOpen(false);
+  };
 
   const scrollNav = (offset) => {
     if (navScrollRef.current) {
@@ -106,33 +195,132 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* Center: Desktop Search Bar (hidden on mobile) */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-4">
-            <button
-              type="button"
-              onClick={() => setIsSearchOpen(true)}
-              className="w-full flex items-center justify-between px-5 py-2.5 text-xs bg-white text-[#322D29] rounded-full hover:bg-white/80 transition-all duration-200 shadow-xs group"
-            >
-              <span className="flex items-center gap-2.5 text-[#AC9C8D] font-medium">
-                <Search className="w-4 h-4 text-[#72383D]" />
-                Search Salwar Kameez, Sarees, Kameez, Tunics...
-              </span>
-              <kbd className="px-2 py-0.5 text-[10px] bg-[#EFE9E1] rounded-md text-[#322D29] font-mono">
-                ⌘K
-              </kbd>
-            </button>
+          {/* Center: Desktop Direct Search Bar with Live Dropdown (hidden on mobile) */}
+          <div ref={searchContainerRef} className="hidden lg:flex flex-1 max-w-md mx-4 relative">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
+              <input
+                type="text"
+                value={navSearchInput}
+                onChange={(e) => {
+                  setNavSearchInput(e.target.value);
+                  setIsDropdownOpen(true);
+                }}
+                onFocus={() => {
+                  if (navSearchInput.trim().length >= 2) {
+                    setIsDropdownOpen(true);
+                  }
+                }}
+                placeholder="Search Salwar Kameez, Sarees, Tunics..."
+                className="w-full pl-10 pr-9 py-2.5 text-xs bg-white text-[#322D29] rounded-full border border-transparent focus:border-[#72383D]/40 focus:outline-none focus:ring-2 focus:ring-[#72383D]/10 transition-all shadow-xs placeholder-[#AC9C8D]"
+              />
+              <button
+                type="submit"
+                aria-label="Submit search"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#72383D] hover:scale-110 transition-transform cursor-pointer"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+              {navSearchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#AC9C8D] hover:text-[#322D29] p-0.5 rounded-full transition-colors cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </form>
+
+            {/* Live Autocomplete / Matching Results Dropdown */}
+            {isDropdownOpen && navSearchInput.trim().length >= 2 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-[#EFE9E1] z-50 overflow-hidden">
+                {isSearching ? (
+                  <div className="py-6 px-4 flex items-center justify-center gap-2 text-xs text-[#AC9C8D]">
+                    <Loader2 className="w-4 h-4 animate-spin text-[#72383D]" />
+                    <span>Searching boutique collection...</span>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <div className="flex flex-col">
+                    <div className="px-4 py-2 bg-[#EFE9E1]/40 border-b border-[#EFE9E1] flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#AC9C8D]">
+                        Quick Matches
+                      </span>
+                      <span className="text-[10px] text-[#72383D] font-medium">
+                        {searchResults.length} {searchResults.length === 1 ? "piece" : "pieces"}
+                      </span>
+                    </div>
+
+                    <div className="max-h-72 overflow-y-auto divide-y divide-[#EFE9E1]/60">
+                      {searchResults.map((product) => (
+                        <div
+                          key={product.id}
+                          onClick={() => handleSelectDropdownProduct(product)}
+                          className="p-2.5 flex items-center gap-3 hover:bg-[#EFE9E1]/50 cursor-pointer transition-colors group"
+                        >
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-10 h-12 object-cover rounded-lg bg-[#EFE9E1] shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#AC9C8D]">
+                              {product.subCategory || product.category}
+                            </span>
+                            <h4 className="text-xs font-semibold text-[#322D29] truncate group-hover:text-[#72383D] transition-colors">
+                              {product.name}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-xs font-bold text-[#72383D]">
+                                ৳{product.price.toLocaleString()}
+                              </span>
+                              {product.originalPrice && (
+                                <span className="text-[10px] text-[#AC9C8D] line-through">
+                                  ৳{product.originalPrice.toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <ArrowRight className="w-3.5 h-3.5 text-[#AC9C8D] group-hover:text-[#72383D] group-hover:translate-x-0.5 transition-all shrink-0" />
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleSearchSubmit}
+                      className="w-full py-2.5 px-3 bg-[#EFE9E1]/70 hover:bg-[#72383D] hover:text-[#EFE9E1] text-[#322D29] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border-t border-[#EFE9E1] cursor-pointer"
+                    >
+                      <span>Search all in catalogue for "{navSearchInput}"</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="py-6 px-4 text-center text-xs text-[#AC9C8D]">
+                    <p className="font-semibold text-[#322D29] mb-1">
+                      No products found for "{navSearchInput}"
+                    </p>
+                    <p>Press Enter to search catalog or try another keyword</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Action Icons */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Mobile Search Button */}
+            {/* Mobile Search Toggle Button */}
             <button
               type="button"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search"
-              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#322D29] bg-white/70 hover:bg-[#72383D] hover:text-white transition-colors"
+              onClick={() => setIsMobileSearchExpanded((prev) => !prev)}
+              aria-label="Toggle search bar"
+              className={`lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                isMobileSearchExpanded
+                  ? "bg-[#72383D] text-[#EFE9E1]"
+                  : "bg-white/70 text-[#322D29] hover:bg-[#72383D] hover:text-white"
+              }`}
             >
-              <Search className="w-5 h-5" />
+              {isMobileSearchExpanded ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
             </button>
 
             {/* Wishlist Button */}
@@ -191,6 +379,39 @@ const Navbar = () => {
             </a>
           </div>
         </div>
+
+        {/* Mobile Inline Search Bar (Expanded on mobile, directly in navbar - no modal) */}
+        {isMobileSearchExpanded && (
+          <div className="lg:hidden pb-3 pt-1 border-t border-[#D1C7BD]/20 animate-fade-in">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
+              <input
+                type="text"
+                autoFocus
+                value={navSearchInput}
+                onChange={(e) => setNavSearchInput(e.target.value)}
+                placeholder="Search Salwar Kameez, Sarees, Tunics..."
+                className="w-full pl-10 pr-9 py-2.5 text-xs bg-white text-[#322D29] rounded-xl outline-none placeholder-[#AC9C8D] shadow-xs focus:ring-2 focus:ring-[#72383D]/20 transition-all border border-[#EFE9E1]"
+              />
+              <button
+                type="submit"
+                aria-label="Submit search"
+                className="absolute left-3 text-[#72383D]"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+              {navSearchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  aria-label="Clear search"
+                  className="absolute right-3 text-[#AC9C8D] hover:text-[#322D29]"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </form>
+          </div>
+        )}
       </div>
 
       {/* Desktop Secondary Category Navigation Bar - Clean, Arrow-Navigated & Reduced Text */}

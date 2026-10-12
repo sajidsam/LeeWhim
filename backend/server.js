@@ -25,6 +25,30 @@ if (process.env.MONGODB_URI && !process.env.MONGODB_URI.includes("<CLUSTER_HOST>
 }
 
 // ==========================================
+// HIGH-SPEED IN-MEMORY CACHING LAYER
+// ==========================================
+const cache = new Map();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 Minutes TTL
+
+const getFromCache = (key) => {
+  const cached = cache.get(key);
+  if (!cached) return null;
+  if (Date.now() > cached.expiresAt) {
+    cache.delete(key);
+    return null;
+  }
+  return cached.data;
+};
+
+const setInCache = (key, data, ttlMs = CACHE_TTL_MS) => {
+  if (cache.size > 500) {
+    const oldestKey = cache.keys().next().value;
+    cache.delete(oldestKey);
+  }
+  cache.set(key, { data, expiresAt: Date.now() + ttlMs });
+};
+
+// ==========================================
 // API ROUTES
 // ==========================================
 
@@ -33,37 +57,73 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     service: "Rongon Luxury Women Backend",
+    cacheKeysCount: cache.size,
     timestamp: new Date().toISOString(),
     dbState: require("mongoose").connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
 
-// GET /api/categories - List all categories
+// GET /api/categories - List all categories (Cached)
 app.get("/api/categories", async (req, res) => {
+  const cacheKey = "categories:all";
+  const cachedData = getFromCache(cacheKey);
+  if (cachedData) {
+    res.setHeader("X-Cache", "HIT");
+    return res.json(cachedData);
+  }
+
   try {
-    const categories = await Category.find({ isActive: true }).sort({ displayOrder: 1 });
-    res.json({ success: true, count: categories.length, data: categories });
+    const rawCategories = await Category.find({ isActive: true }).sort({ displayOrder: 1 }).lean();
+    const categories = rawCategories.map((c) => ({
+      ...c,
+      id: c.categoryId || c.slug || c._id,
+    }));
+    const responsePayload = { success: true, count: categories.length, data: categories };
+    setInCache(cacheKey, responsePayload);
+    res.setHeader("X-Cache", "MISS");
+    res.json(responsePayload);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// GET /api/banners - List hero slides and promos
+// GET /api/banners - List hero slides and promos (Cached)
 app.get("/api/banners", async (req, res) => {
+  const { type } = req.query;
+  const cacheKey = `banners:${type || "all"}`;
+  const cachedData = getFromCache(cacheKey);
+  if (cachedData) {
+    res.setHeader("X-Cache", "HIT");
+    return res.json(cachedData);
+  }
+
   try {
-    const { type } = req.query;
     const query = { isActive: true };
     if (type) query.type = type;
 
-    const banners = await Banner.find(query).sort({ displayOrder: 1 });
-    res.json({ success: true, count: banners.length, data: banners });
+    const rawBanners = await Banner.find(query).sort({ displayOrder: 1 }).lean();
+    const banners = rawBanners.map((b) => ({
+      ...b,
+      id: b.bannerId || b._id,
+    }));
+    const responsePayload = { success: true, count: banners.length, data: banners };
+    setInCache(cacheKey, responsePayload);
+    res.setHeader("X-Cache", "MISS");
+    res.json(responsePayload);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// GET /api/products - Search, filter, sort, paginate
+// GET /api/products - Search, filter, sort, paginate (Optimized & Cached)
 app.get("/api/products", async (req, res) => {
+  const cacheKey = `products:${req.originalUrl}`;
+  const cachedData = getFromCache(cacheKey);
+  if (cachedData) {
+    res.setHeader("X-Cache", "HIT");
+    return res.json(cachedData);
+  }
+
   try {
     const {
       category,
@@ -74,13 +134,17 @@ app.get("/api/products", async (req, res) => {
       search,
       sort,
       page = 1,
-      limit = 200,
+      limit = 20,
     } = req.query;
 
     const query = { isActive: true };
 
     if (categorySlug && categorySlug !== "all") {
-      query.categorySlug = categorySlug;
+      if (categorySlug === "kurti" || categorySlug === "kurtis") {
+        query.categorySlug = { $in: ["salwar-kameez", "kameez", "tunic"] };
+      } else {
+        query.categorySlug = categorySlug;
+      }
     }
     if (subCategory) {
       query.subCategory = new RegExp(subCategory, "i");
@@ -103,35 +167,45 @@ app.get("/api/products", async (req, res) => {
       ];
     }
 
-    // Sorting
-    let sortOptions = { createdAt: -1 };
+    // Sorting: default to mixed curated round-robin order
+    let sortOptions = { featuredOrder: 1 };
     if (sort === "price-asc" || sort === "price-low") sortOptions = { price: 1 };
     else if (sort === "price-desc" || sort === "price-high") sortOptions = { price: -1 };
     else if (sort === "rating") sortOptions = { rating: -1 };
     else if (sort === "newest") sortOptions = { createdAt: -1 };
+    else if (sort === "featured") sortOptions = { featuredOrder: 1 };
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
-    const limitNum = limit === "all" ? 0 : Math.max(0, parseInt(limit, 10) || 200);
+    const limitNum = limit === "all" ? 0 : Math.max(0, parseInt(limit, 10) || 20);
     const skip = limitNum > 0 ? (pageNum - 1) * limitNum : 0;
 
-    let queryPromise = Product.find(query).sort(sortOptions);
+    let queryPromise = Product.find(query).sort(sortOptions).lean();
     if (limitNum > 0) {
       queryPromise = queryPromise.skip(skip).limit(limitNum);
     }
 
-    const [products, total] = await Promise.all([
+    const [rawProducts, total] = await Promise.all([
       queryPromise,
       Product.countDocuments(query),
     ]);
 
-    res.json({
+    const products = rawProducts.map((p) => ({
+      ...p,
+      id: p.productId != null ? p.productId : p._id,
+    }));
+
+    const responsePayload = {
       success: true,
       count: products.length,
       total,
       currentPage: pageNum,
       totalPages: limitNum > 0 ? Math.ceil(total / limitNum) : 1,
       data: products,
-    });
+    };
+
+    setInCache(cacheKey, responsePayload);
+    res.setHeader("X-Cache", "MISS");
+    res.json(responsePayload);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -160,11 +234,25 @@ app.get("/api/products/:identifier", async (req, res) => {
   }
 });
 
-// GET /api/reviews - Customer reviews & testimonials
+// GET /api/reviews - Customer reviews & testimonials (Cached)
 app.get("/api/reviews", async (req, res) => {
+  const cacheKey = "reviews:all";
+  const cachedData = getFromCache(cacheKey);
+  if (cachedData) {
+    res.setHeader("X-Cache", "HIT");
+    return res.json(cachedData);
+  }
+
   try {
-    const reviews = await Review.find().sort({ createdAt: -1 });
-    res.json({ success: true, count: reviews.length, data: reviews });
+    const rawReviews = await Review.find().sort({ createdAt: -1 }).lean();
+    const reviews = rawReviews.map((r) => ({
+      ...r,
+      id: r.reviewId || r._id,
+    }));
+    const responsePayload = { success: true, count: reviews.length, data: reviews };
+    setInCache(cacheKey, responsePayload);
+    res.setHeader("X-Cache", "MISS");
+    res.json(responsePayload);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

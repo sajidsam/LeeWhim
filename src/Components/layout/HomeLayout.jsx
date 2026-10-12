@@ -5,7 +5,6 @@ import MobileBottomNav from "./MobileBottomNav";
 import CartDrawer from "../common/CartDrawer";
 import QuickViewModal from "../common/QuickViewModal";
 import MobileDrawer from "../common/MobileDrawer";
-import SearchModal from "../common/SearchModal";
 import Toast from "../common/Toast";
 import Home from "../../pages/Home";
 
@@ -30,7 +29,6 @@ const HomeLayout = () => {
       <CartDrawer />
       <QuickViewModal />
       <MobileDrawer />
-      <SearchModal />
       <Toast />
     </div>
   );

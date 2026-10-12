@@ -11,6 +11,9 @@ const ShopContext = createContext();
 export const ShopProvider = ({ children }) => {
   // Live Database States
   const [products, setProducts] = useState([]);
+  const [sareeProducts, setSareeProducts] = useState([]);
+  const [kurtiProducts, setKurtiProducts] = useState([]);
+  const [bagProducts, setBagProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [heroSlides, setHeroSlides] = useState([]);
   const [promoBanners, setPromoBanners] = useState([]);
@@ -52,27 +55,40 @@ export const ShopProvider = ({ children }) => {
   // Floating Toast alert
   const [toast, setToast] = useState({ visible: false, message: "", type: "info" });
 
-  // Fetch all initial data from MongoDB API
+  // Fetch optimized targeted initial collections from MongoDB API
   const loadDatabaseData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [productsRes, categoriesRes, heroBannersRes, promosRes, reviewsRes] = await Promise.all([
-        fetchProducts({ limit: 500 }), // retrieve catalogue from database
+      const [
+        categoriesRes,
+        heroBannersRes,
+        promosRes,
+        reviewsRes,
+        sareesRes,
+        kurtisRes,
+        bagsRes,
+        initialProductsRes,
+      ] = await Promise.all([
         fetchCategories(),
         fetchBanners("hero"),
         fetchBanners("promo"),
         fetchReviews(),
+        fetchProducts({ categorySlug: "saree", limit: 10 }), // 2 rows of sarees
+        fetchProducts({ categorySlug: "salwar-kameez", limit: 10 }), // 2 rows of kurtis
+        fetchProducts({ categorySlug: "bags", limit: 10 }), // 2 rows of bags
+        fetchProducts({ limit: 16 }), // initial catalog page
       ]);
 
-      if (productsRes && productsRes.products) {
-        setProducts(productsRes.products);
-      }
       if (categoriesRes) setCategories(categoriesRes);
       if (heroBannersRes) setHeroSlides(heroBannersRes);
       if (promosRes) setPromoBanners(promosRes);
       if (reviewsRes) setReviews(reviewsRes);
+      if (sareesRes?.products) setSareeProducts(sareesRes.products);
+      if (kurtisRes?.products) setKurtiProducts(kurtisRes.products);
+      if (bagsRes?.products) setBagProducts(bagsRes.products);
+      if (initialProductsRes?.products) setProducts(initialProductsRes.products);
     } catch (err) {
-      console.error("Failed to fetch data from database:", err);
+      console.error("Failed to fetch initial data from database:", err);
     } finally {
       setIsLoading(false);
     }
@@ -178,6 +194,9 @@ export const ShopProvider = ({ children }) => {
       value={{
         products,
         setProducts,
+        sareeProducts,
+        kurtiProducts,
+        bagProducts,
         categories,
         heroSlides,
         promoBanners,
