@@ -76,8 +76,14 @@ const bannerSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: "rongon_banners", // Explicit collection name
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+bannerSchema.virtual("id").get(function () {
+  return this.bannerId || this._id.toString();
+});
 
 bannerSchema.index({ type: 1, displayOrder: 1 });
 

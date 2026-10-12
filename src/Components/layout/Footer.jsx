@@ -8,7 +8,6 @@ import {
   Clock,
   Send,
   MessageCircle,
-  Truck,
 } from "lucide-react";
 
 const Footer = () => {

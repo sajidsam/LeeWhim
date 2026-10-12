@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { HERO_SLIDES } from "../../data/mockProducts";
 import { useShop } from "../../Context/ShopContext";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from "lucide-react";
 
@@ -7,22 +6,27 @@ const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
-  const { setActiveCategoryFilter } = useShop();
+  const { setActiveCategoryFilter, heroSlides = [] } = useShop();
+
+  const slides = heroSlides;
 
   // Auto advance slide - resets timer on user interaction
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [currentSlide]);
+  }, [currentSlide, slides.length]);
 
   const handlePrev = () => {
-    setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
+    if (slides.length === 0) return;
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    if (slides.length === 0) return;
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
   const handleTouchStart = (e) => {
@@ -61,7 +65,7 @@ const HeroSlider = () => {
       onTouchEnd={handleTouchEnd}
     >
       {/* Slides Container */}
-      {HERO_SLIDES.map((slide, index) => {
+      {slides.map((slide, index) => {
         const isActive = index === currentSlide;
         return (
           <div
@@ -171,7 +175,7 @@ const HeroSlider = () => {
 
       {/* Dot Indicators */}
       <div className="absolute bottom-2.5 sm:bottom-4 md:bottom-6 inset-x-0 z-20 flex justify-center gap-1.5 sm:gap-2">
-        {HERO_SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             type="button"

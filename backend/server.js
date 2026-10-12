@@ -74,7 +74,7 @@ app.get("/api/products", async (req, res) => {
       search,
       sort,
       page = 1,
-      limit = 20,
+      limit = 200,
     } = req.query;
 
     const query = { isActive: true };
@@ -90,23 +90,37 @@ app.get("/api/products", async (req, res) => {
       if (minPrice) query.price.$gte = Number(minPrice);
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
-    if (search) {
-      query.$text = { $search: search };
+    if (search && search.trim()) {
+      const cleanSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const searchRegex = new RegExp(cleanSearch, "i");
+      query.$or = [
+        { name: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex },
+        { subCategory: searchRegex },
+        { fabric: searchRegex },
+        { sku: searchRegex },
+      ];
     }
 
     // Sorting
     let sortOptions = { createdAt: -1 };
-    if (sort === "price-asc") sortOptions = { price: 1 };
-    else if (sort === "price-desc") sortOptions = { price: -1 };
+    if (sort === "price-asc" || sort === "price-low") sortOptions = { price: 1 };
+    else if (sort === "price-desc" || sort === "price-high") sortOptions = { price: -1 };
     else if (sort === "rating") sortOptions = { rating: -1 };
     else if (sort === "newest") sortOptions = { createdAt: -1 };
 
-    const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10);
-    const skip = (pageNum - 1) * limitNum;
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = limit === "all" ? 0 : Math.max(0, parseInt(limit, 10) || 200);
+    const skip = limitNum > 0 ? (pageNum - 1) * limitNum : 0;
+
+    let queryPromise = Product.find(query).sort(sortOptions);
+    if (limitNum > 0) {
+      queryPromise = queryPromise.skip(skip).limit(limitNum);
+    }
 
     const [products, total] = await Promise.all([
-      Product.find(query).sort(sortOptions).skip(skip).limit(limitNum),
+      queryPromise,
       Product.countDocuments(query),
     ]);
 
@@ -115,7 +129,7 @@ app.get("/api/products", async (req, res) => {
       count: products.length,
       total,
       currentPage: pageNum,
-      totalPages: Math.ceil(total / limitNum),
+      totalPages: limitNum > 0 ? Math.ceil(total / limitNum) : 1,
       data: products,
     });
   } catch (error) {

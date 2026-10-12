@@ -1,24 +1,23 @@
 import React, { useState, useMemo } from "react";
 import ProductCard from "../common/ProductCard";
-import { PRODUCTS, CATEGORIES } from "../../data/mockProducts";
 import { useShop } from "../../Context/ShopContext";
-import { Sparkles, ArrowUpDown } from "lucide-react";
+import { Sparkles, ArrowUpDown, Loader2 } from "lucide-react";
 
 const CatalogSection = () => {
-  const { activeCategoryFilter, setActiveCategoryFilter } = useShop();
+  const { activeCategoryFilter, setActiveCategoryFilter, products = [], categories = [], isLoading } = useShop();
   const [sortBy, setSortBy] = useState("featured");
 
   // Filtering products
   const filteredProducts = useMemo(() => {
-    let result = [...PRODUCTS];
+    let result = [...products];
 
     if (activeCategoryFilter !== "all") {
       result = result.filter(
         (p) =>
           (p.categorySlug && p.categorySlug.toLowerCase() === activeCategoryFilter.toLowerCase()) ||
-          p.subCategory.toLowerCase().replace(/[\s&]+/g, '-').includes(activeCategoryFilter.toLowerCase()) ||
-          p.subCategory.toLowerCase().includes(activeCategoryFilter.toLowerCase()) ||
-          p.category.toLowerCase().includes(activeCategoryFilter.toLowerCase())
+          (p.subCategory && p.subCategory.toLowerCase().replace(/[\s&]+/g, "-").includes(activeCategoryFilter.toLowerCase())) ||
+          (p.subCategory && p.subCategory.toLowerCase().includes(activeCategoryFilter.toLowerCase())) ||
+          (p.category && p.category.toLowerCase().includes(activeCategoryFilter.toLowerCase()))
       );
     }
 
@@ -27,11 +26,11 @@ const CatalogSection = () => {
     } else if (sortBy === "price-high") {
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
+      result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     }
 
     return result;
-  }, [activeCategoryFilter, sortBy]);
+  }, [products, activeCategoryFilter, sortBy]);
 
   return (
     <section id="catalog-section" className="py-12 sm:py-16 bg-[#EFE9E1]">
@@ -85,9 +84,9 @@ const CatalogSection = () => {
                 : "bg-white text-[#322D29] hover:bg-white/80"
               }`}
           >
-            All Collections ({PRODUCTS.length})
+            All Collections ({products.length})
           </button>
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const isSelected = activeCategoryFilter === cat.slug;
             return (
               <button

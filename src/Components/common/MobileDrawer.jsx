@@ -1,6 +1,5 @@
 import React from "react";
 import { useShop } from "../../Context/ShopContext";
-import { CATEGORIES } from "../../data/mockProducts";
 import { X, Search, Phone, Sparkles, MessageCircle, ChevronRight, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -10,6 +9,7 @@ const MobileDrawer = () => {
     setIsMobileMenuOpen,
     setIsSearchOpen,
     setActiveCategoryFilter,
+    categories = [],
   } = useShop();
 
   if (!isMobileMenuOpen) return null;
@@ -84,7 +84,7 @@ const MobileDrawer = () => {
                   <ChevronRight className="w-3.5 h-3.5 text-[#AC9C8D]" />
                 </button>
               </li>
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <li key={cat.id}>
                   <button
                     type="button"

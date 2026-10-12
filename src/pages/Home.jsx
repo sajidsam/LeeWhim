@@ -4,6 +4,7 @@ import CategoryBar from "../Components/home/CategoryBar";
 import TrustBadges from "../Components/home/TrustBadges";
 import CuratedSpotlight from "../Components/home/CuratedSpotlight";
 import PromoBanners from "../Components/home/PromoBanners";
+import BagsRowSection from "../Components/home/BagsRowSection";
 import CatalogSection from "../Components/home/CatalogSection";
 import CustomerReviews from "../Components/home/CustomerReviews";
 import InstagramShowcase from "../Components/home/InstagramShowcase";
@@ -25,6 +26,9 @@ const Home = () => {
 
       {/* Dual Promotion Banners */}
       <PromoBanners />
+
+      {/* Dedicated 1-Row Women Bags & Crossbody Showcase */}
+      <BagsRowSection />
 
       {/* Complete Responsive Product Catalog (sm: 2 cols, md: 3 cols, lg: 4/5 cols) */}
       <CatalogSection />

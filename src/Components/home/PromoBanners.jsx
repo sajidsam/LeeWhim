@@ -1,10 +1,9 @@
 import React from "react";
-import { PROMO_BANNERS } from "../../data/mockProducts";
 import { useShop } from "../../Context/ShopContext";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 const PromoBanners = () => {
-  const { setActiveCategoryFilter } = useShop();
+  const { setActiveCategoryFilter, promoBanners = [] } = useShop();
 
   const handleBannerClick = (slug) => {
     setActiveCategoryFilter(slug);
@@ -14,11 +13,13 @@ const PromoBanners = () => {
     }
   };
 
+  if (!promoBanners || promoBanners.length === 0) return null;
+
   return (
     <section className="hidden sm:block py-10 sm:py-14 bg-[#EFE9E1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {PROMO_BANNERS.map((banner) => (
+          {promoBanners.map((banner) => (
             <div
               key={banner.id}
               onClick={() => handleBannerClick(banner.categorySlug)}

@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { useShop } from "../../Context/ShopContext";
-import { CATEGORIES } from "../../data/mockProducts";
 import logo from "@/assets/logo.png";
 import {
   Menu,
@@ -24,6 +23,7 @@ const SHORT_NAMES = {
   "shirt": "Shirts",
   "shrug": "Shrugs",
   "bottom-wear": "Bottoms",
+  "bags": "Bags",
 };
 
 const Navbar = () => {
@@ -36,6 +36,7 @@ const Navbar = () => {
     setIsSearchOpen,
     setActiveCategoryFilter,
     showToast,
+    categories = [],
   } = useShop();
 
   const navScrollRef = useRef(null);
@@ -220,7 +221,7 @@ const Navbar = () => {
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
 
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"

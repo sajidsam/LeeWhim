@@ -51,8 +51,14 @@ const categorySchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: "rongon_categories", // Explicit collection name
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+categorySchema.virtual("id").get(function () {
+  return this.categoryId || this.slug;
+});
 
 categorySchema.index({ displayOrder: 1 });
 

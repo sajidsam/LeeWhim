@@ -1,14 +1,14 @@
 import React from "react";
 import ProductCard from "../common/ProductCard";
-import { PRODUCTS } from "../../data/mockProducts";
 import { useShop } from "../../Context/ShopContext";
 import { Sparkles, ArrowRight } from "lucide-react";
 
 const CuratedSpotlight = () => {
-  const { setActiveCategoryFilter } = useShop();
+  const { setActiveCategoryFilter, products = [] } = useShop();
 
-  // Pick 6 spotlight products (Sarees + Jewellery mix)
-  const spotlightProducts = PRODUCTS.slice(0, 6);
+  // Pick 6 spotlight products (featured or first 6 boutique items)
+  const featured = products.filter((p) => p.isFeatured || p.isNewArrival);
+  const spotlightProducts = (featured.length >= 4 ? featured : products).slice(0, 6);
 
   const handleSpotlightCta = () => {
     setActiveCategoryFilter("salwar-kameez");

@@ -1,23 +1,23 @@
 import React, { useState, useMemo } from "react";
 import { useShop } from "../../Context/ShopContext";
-import { PRODUCTS } from "../../data/mockProducts";
 import { Search, X, Star, ShoppingBag, ArrowRight } from "lucide-react";
 
 const SearchModal = () => {
-  const { isSearchOpen, setIsSearchOpen, setQuickViewProduct, addToCart } = useShop();
+  const { isSearchOpen, setIsSearchOpen, setQuickViewProduct, addToCart, products = [] } = useShop();
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredProducts = useMemo(() => {
     if (!searchTerm.trim()) return [];
     const term = searchTerm.toLowerCase();
-    return PRODUCTS.filter(
+    return products.filter(
       (p) =>
-        p.name.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p.subCategory.toLowerCase().includes(term) ||
-        (p.fabric && p.fabric.toLowerCase().includes(term))
+        (p.name && p.name.toLowerCase().includes(term)) ||
+        (p.category && p.category.toLowerCase().includes(term)) ||
+        (p.subCategory && p.subCategory.toLowerCase().includes(term)) ||
+        (p.fabric && p.fabric.toLowerCase().includes(term)) ||
+        (p.sku && p.sku.toLowerCase().includes(term))
     );
-  }, [searchTerm]);
+  }, [searchTerm, products]);
 
   if (!isSearchOpen) return null;
 

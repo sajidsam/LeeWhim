@@ -174,8 +174,14 @@ const productSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: "rongon_products", // Explicit collection name for Rongon brand
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+productSchema.virtual("id").get(function () {
+  return this.productId != null ? this.productId : this._id;
+});
 
 // Compound indexes for optimal querying performance
 productSchema.index({ categorySlug: 1, price: 1 });

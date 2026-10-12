@@ -1,38 +1,43 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { PRODUCTS } from "../data/mockProducts";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+  fetchProducts,
+  fetchCategories,
+  fetchBanners,
+  fetchReviews,
+} from "../services/api";
 
 const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
-  // Cart State (saved to localStorage for real experience)
+  // Live Database States
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [heroSlides, setHeroSlides] = useState([]);
+  const [promoBanners, setPromoBanners] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cart State (loaded from localStorage)
   const [cart, setCart] = useState(() => {
     try {
       const saved = localStorage.getItem("rongon_cart") || localStorage.getItem("leeswhim_cart");
-      if (saved && !saved.includes("shopify")) {
+      if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.product?.image?.includes("lerevecraze")) {
-          return parsed;
-        }
+        if (Array.isArray(parsed)) return parsed;
       }
-      return [
-        { product: PRODUCTS[0], quantity: 1, selectedColor: PRODUCTS[0].colors[0] },
-        { product: PRODUCTS[1], quantity: 1, selectedColor: PRODUCTS[1].colors[0] },
-      ];
+      return [];
     } catch {
-      return [
-        { product: PRODUCTS[0], quantity: 1, selectedColor: PRODUCTS[0].colors[0] },
-        { product: PRODUCTS[1], quantity: 1, selectedColor: PRODUCTS[1].colors[0] },
-      ];
+      return [];
     }
   });
 
-  // Wishlist State
+  // Wishlist State (loaded from localStorage)
   const [wishlist, setWishlist] = useState(() => {
     try {
       const saved = localStorage.getItem("rongon_wishlist") || localStorage.getItem("leeswhim_wishlist");
-      return saved ? JSON.parse(saved) : [PRODUCTS[0].id, PRODUCTS[2].id];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return [PRODUCTS[0].id, PRODUCTS[2].id];
+      return [];
     }
   });
 
@@ -47,6 +52,37 @@ export const ShopProvider = ({ children }) => {
   // Floating Toast alert
   const [toast, setToast] = useState({ visible: false, message: "", type: "info" });
 
+  // Fetch all initial data from MongoDB API
+  const loadDatabaseData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [productsRes, categoriesRes, heroBannersRes, promosRes, reviewsRes] = await Promise.all([
+        fetchProducts({ limit: 500 }), // retrieve catalogue from database
+        fetchCategories(),
+        fetchBanners("hero"),
+        fetchBanners("promo"),
+        fetchReviews(),
+      ]);
+
+      if (productsRes && productsRes.products) {
+        setProducts(productsRes.products);
+      }
+      if (categoriesRes) setCategories(categoriesRes);
+      if (heroBannersRes) setHeroSlides(heroBannersRes);
+      if (promosRes) setPromoBanners(promosRes);
+      if (reviewsRes) setReviews(reviewsRes);
+    } catch (err) {
+      console.error("Failed to fetch data from database:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDatabaseData();
+  }, [loadDatabaseData]);
+
+  // Persist cart
   useEffect(() => {
     try {
       localStorage.setItem("rongon_cart", JSON.stringify(cart));
@@ -55,6 +91,7 @@ export const ShopProvider = ({ children }) => {
     }
   }, [cart]);
 
+  // Persist wishlist
   useEffect(() => {
     try {
       localStorage.setItem("rongon_wishlist", JSON.stringify(wishlist));
@@ -139,6 +176,14 @@ export const ShopProvider = ({ children }) => {
   return (
     <ShopContext.Provider
       value={{
+        products,
+        setProducts,
+        categories,
+        heroSlides,
+        promoBanners,
+        reviews,
+        isLoading,
+        loadDatabaseData,
         cart,
         cartCount,
         cartSubtotal,

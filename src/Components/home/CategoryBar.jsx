@@ -1,9 +1,8 @@
 import React from "react";
-import { CATEGORIES } from "../../data/mockProducts";
 import { useShop } from "../../Context/ShopContext";
 
 const CategoryBar = () => {
-  const { activeCategoryFilter, setActiveCategoryFilter } = useShop();
+  const { activeCategoryFilter, setActiveCategoryFilter, categories = [] } = useShop();
 
   const handleSelect = (slug) => {
     setActiveCategoryFilter(slug);
@@ -31,7 +30,7 @@ const CategoryBar = () => {
             onClick={() => handleSelect("all")}
             className="text-xs font-semibold text-[#72383D] hover:underline"
           >
-            View All ({CATEGORIES.reduce((acc, c) => acc + c.itemCount, 0)}+ items)
+            View All ({categories.reduce((acc, c) => acc + (c.itemCount || 0), 0)}+ items)
           </button>
         </div>
 
@@ -58,7 +57,7 @@ const CategoryBar = () => {
             </span>
           </button>
 
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const isSelected = activeCategoryFilter === cat.slug;
             return (
               <button

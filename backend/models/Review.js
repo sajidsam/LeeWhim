@@ -54,7 +54,13 @@ const reviewSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: "rongon_reviews",
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+reviewSchema.virtual("id").get(function () {
+  return this.reviewId || this._id.toString();
+});
 
 module.exports = mongoose.model("Review", reviewSchema);
