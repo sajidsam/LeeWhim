@@ -3,6 +3,8 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import MobileBottomNav from "./MobileBottomNav";
 import CartDrawer from "../common/CartDrawer";
+import CheckoutModal from "../common/CheckoutModal";
+import OrderSuccessModal from "../common/OrderSuccessModal";
 import QuickViewModal from "../common/QuickViewModal";
 import MobileDrawer from "../common/MobileDrawer";
 import Toast from "../common/Toast";
@@ -27,6 +29,8 @@ const HomeLayout = () => {
 
       {/* Interactive Drawers & Modals */}
       <CartDrawer />
+      <CheckoutModal />
+      <OrderSuccessModal />
       <QuickViewModal />
       <MobileDrawer />
       <Toast />

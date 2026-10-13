@@ -172,3 +172,57 @@ export const fetchReviews = async (useCache = true) => {
     return [];
   }
 };
+
+/**
+ * Create Cash on Delivery Order
+ */
+export const createOrder = async (orderData) => {
+  const targetUrl = `${PRIMARY_URL}/orders`;
+  const res = await fetch(targetUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(orderData),
+  });
+  if (!res.ok) {
+    const errorJson = await res.json().catch(() => ({}));
+    throw new Error(errorJson.message || `Failed to create order (HTTP ${res.status})`);
+  }
+  return await res.json();
+};
+
+/**
+ * Initiate SSLCommerz Secure Payment Session
+ */
+export const initiateSSLCommerzPayment = async (orderData) => {
+  const targetUrl = `${PRIMARY_URL}/payment/sslcommerz/init`;
+  const res = await fetch(targetUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(orderData),
+  });
+  if (!res.ok) {
+    const errorJson = await res.json().catch(() => ({}));
+    throw new Error(errorJson.message || `Payment initialization failed (HTTP ${res.status})`);
+  }
+  return await res.json();
+};
+
+/**
+ * Fetch Order Details by Order Number
+ */
+export const fetchOrderDetails = async (orderNumber) => {
+  const targetUrl = `${PRIMARY_URL}/orders/${orderNumber}`;
+  const res = await fetch(targetUrl, {
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  return await res.json();
+};

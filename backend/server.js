@@ -9,6 +9,11 @@ const Category = require("./models/Category");
 const Banner = require("./models/Banner");
 const Review = require("./models/Review");
 const Order = require("./models/Order");
+const {
+  getSSLCommerzConfig,
+  initSSLCommerzPayment,
+  validateSSLCommerzPayment,
+} = require("./services/sslcommerz");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Root URL Health & Info Route (Prevents 'Cannot GET /' in browser)
 app.get("/", (req, res) => {
@@ -277,21 +283,45 @@ app.get("/api/reviews", async (req, res) => {
   }
 });
 
-// POST /api/orders - Create new order (future integration)
+// GET /api/orders/:orderNumber - Fetch single order details
+app.get("/api/orders/:orderNumber", async (req, res) => {
+  try {
+    const { orderNumber } = req.params;
+    const order = await Order.findOne({ orderNumber }).lean();
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    res.json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// POST /api/orders - Create new order (e.g., Cash on Delivery)
 app.post("/api/orders", async (req, res) => {
   try {
-    const { customer, items, subtotal, deliveryFee, totalAmount, paymentMethod } = req.body;
+    const { customer, items, subtotal, deliveryFee, discountAmount, totalAmount, paymentMethod } = req.body;
 
-    const orderNumber = `RNG-${Date.now().toString().slice(-6)}`;
+    if (!items || !items.length) {
+      return res.status(400).json({ success: false, message: "Order items cannot be empty." });
+    }
+    if (!customer || !customer.name || !customer.phone || !customer.address) {
+      return res.status(400).json({ success: false, message: "Customer name, phone, and address are required." });
+    }
+
+    // Generate unique readable order number
+    const orderNumber = `RNG-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
 
     const newOrder = new Order({
       orderNumber,
       customer,
       items,
       subtotal,
-      deliveryFee,
+      deliveryFee: deliveryFee || 70,
+      discountAmount: discountAmount || 0,
       totalAmount,
-      paymentMethod,
+      currency: "BDT",
+      paymentMethod: paymentMethod || "COD",
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Paid",
       orderStatus: "Placed",
     });
@@ -300,6 +330,209 @@ app.post("/api/orders", async (req, res) => {
     res.status(201).json({ success: true, order: savedOrder });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+// POST /api/payment/sslcommerz/init - Initiate secure SSLCommerz payment session
+app.post("/api/payment/sslcommerz/init", async (req, res) => {
+  try {
+    const { customer, items, subtotal, deliveryFee, discountAmount, totalAmount } = req.body;
+
+    if (!items || !items.length) {
+      return res.status(400).json({ success: false, message: "Order items cannot be empty." });
+    }
+    if (!customer || !customer.name || !customer.phone || !customer.address) {
+      return res.status(400).json({ success: false, message: "Customer name, phone, and address are required." });
+    }
+
+    // Server-Side Security: Enforce numeric integrity
+    const computedSubtotal = items.reduce((acc, item) => acc + (Number(item.price) * Number(item.quantity)), 0);
+    const validDeliveryFee = Number(deliveryFee) || 70;
+    const validDiscount = Number(discountAmount) || 0;
+    const validTotal = Math.max(0, computedSubtotal + validDeliveryFee - validDiscount);
+
+    // Create unique transaction order ID
+    const orderNumber = `RNG-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
+
+    const order = new Order({
+      orderNumber,
+      customer,
+      items,
+      subtotal: computedSubtotal,
+      deliveryFee: validDeliveryFee,
+      discountAmount: validDiscount,
+      totalAmount: validTotal,
+      currency: "BDT",
+      paymentMethod: "SSLCommerz",
+      paymentStatus: "Pending",
+      orderStatus: "Placed",
+    });
+
+    // Call SSLCommerz V4 API
+    const sslRes = await initSSLCommerzPayment(order);
+
+    if (!sslRes.success) {
+      return res.status(502).json({
+        success: false,
+        message: sslRes.message || "Unable to initiate payment with SSLCommerz gateway.",
+      });
+    }
+
+    // Save sessionKey and order
+    order.sslcommerzSessionKey = sslRes.sessionKey;
+    await order.save();
+
+    res.json({
+      success: true,
+      gatewayUrl: sslRes.gatewayUrl,
+      orderNumber: order.orderNumber,
+    });
+  } catch (error) {
+    console.error("SSLCommerz Init Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// POST /api/payment/sslcommerz/success - SSLCommerz Success Callback with Server-Side Validation
+app.post("/api/payment/sslcommerz/success", async (req, res) => {
+  const { clientUrl } = getSSLCommerzConfig();
+  try {
+    const { val_id, tran_id, amount, card_type, bank_tran_id } = req.body;
+
+    console.log(`💳 [SSLCommerz Callback] Received success callback for Transaction: ${tran_id}, ValID: ${val_id}`);
+
+    if (!val_id || !tran_id) {
+      return res.redirect(`${clientUrl}/?order_failed=true&error=MissingTransactionDetails`);
+    }
+
+    // Find the corresponding order
+    const order = await Order.findOne({ orderNumber: tran_id });
+    if (!order) {
+      console.error(`❌ [SSLCommerz] Order not found for tran_id: ${tran_id}`);
+      return res.redirect(`${clientUrl}/?order_failed=true&error=OrderNotFound`);
+    }
+
+    // CRITICAL SECURITY STEP: Server-to-Server Validation against SSLCommerz official API
+    const validationRes = await validateSSLCommerzPayment(val_id);
+
+    if (!validationRes.isValid) {
+      console.error(`🚨 [SECURITY ALERT] SSLCommerz validation failed for order ${tran_id}:`, validationRes.data);
+      order.paymentStatus = "Failed";
+      await order.save();
+      return res.redirect(`${clientUrl}/?order_failed=true&order_id=${tran_id}&error=SecurityValidationFailed`);
+    }
+
+    const validatedData = validationRes.data;
+
+    // Verify transaction amount matches order amount (anti-tampering check)
+    const orderAmount = Number(order.totalAmount).toFixed(2);
+    const paidAmount = Number(validatedData.amount).toFixed(2);
+
+    if (Math.abs(orderAmount - paidAmount) > 0.5) {
+      console.error(`🚨 [SECURITY ALERT] Amount mismatch! Order: ${orderAmount}, Paid: ${paidAmount}`);
+      order.paymentStatus = "Failed";
+      await order.save();
+      return res.redirect(`${clientUrl}/?order_failed=true&order_id=${tran_id}&error=AmountMismatch`);
+    }
+
+    // Mark order as paid & confirmed
+    order.paymentStatus = "Paid";
+    order.orderStatus = "Confirmed";
+    order.paymentTransactionId = val_id;
+    order.paymentDetails = {
+      val_id,
+      bank_tran_id: bank_tran_id || validatedData.bank_tran_id,
+      card_type: card_type || validatedData.card_type,
+      card_issuer: validatedData.card_issuer,
+      card_brand: validatedData.card_brand,
+      tran_date: validatedData.tran_date,
+      store_amount: validatedData.store_amount,
+    };
+
+    await order.save();
+    console.log(`✅ [SSLCommerz Success] Order ${tran_id} marked as PAID. ValID: ${val_id}`);
+
+    // Redirect user to frontend order success page with details
+    res.redirect(`${clientUrl}/?order_success=true&order_id=${order.orderNumber}&tran_id=${val_id}&amount=${order.totalAmount}`);
+  } catch (error) {
+    console.error("SSLCommerz Success Callback Exception:", error);
+    res.redirect(`${clientUrl}/?order_failed=true&error=${encodeURIComponent(error.message)}`);
+  }
+});
+
+// POST /api/payment/sslcommerz/fail - SSLCommerz Fail Callback
+app.post("/api/payment/sslcommerz/fail", async (req, res) => {
+  const { clientUrl } = getSSLCommerzConfig();
+  try {
+    const { tran_id, error } = req.body;
+    console.warn(`⚠️ [SSLCommerz Failed] Payment failed for order ${tran_id}: ${error}`);
+
+    if (tran_id) {
+      await Order.findOneAndUpdate(
+        { orderNumber: tran_id },
+        { paymentStatus: "Failed" }
+      );
+    }
+
+    res.redirect(`${clientUrl}/?order_failed=true&order_id=${tran_id || ""}&error=${encodeURIComponent(error || "Payment Failed")}`);
+  } catch (err) {
+    res.redirect(`${clientUrl}/?order_failed=true&error=UnknownError`);
+  }
+});
+
+// POST /api/payment/sslcommerz/cancel - SSLCommerz Cancel Callback
+app.post("/api/payment/sslcommerz/cancel", async (req, res) => {
+  const { clientUrl } = getSSLCommerzConfig();
+  try {
+    const { tran_id } = req.body;
+    console.log(`ℹ️ [SSLCommerz Cancelled] Payment cancelled for order ${tran_id}`);
+
+    if (tran_id) {
+      await Order.findOneAndUpdate(
+        { orderNumber: tran_id },
+        { paymentStatus: "Failed", orderStatus: "Cancelled" }
+      );
+    }
+
+    res.redirect(`${clientUrl}/?order_cancelled=true&order_id=${tran_id || ""}`);
+  } catch (err) {
+    res.redirect(`${clientUrl}/?order_cancelled=true`);
+  }
+});
+
+// POST /api/payment/sslcommerz/ipn - SSLCommerz Instant Payment Notification (IPN) Webhook
+app.post("/api/payment/sslcommerz/ipn", async (req, res) => {
+  try {
+    const { val_id, tran_id } = req.body;
+    console.log(`🔔 [SSLCommerz IPN Webhook] Received IPN for tran_id: ${tran_id}, val_id: ${val_id}`);
+
+    if (!val_id || !tran_id) {
+      return res.status(400).send("Bad IPN Request");
+    }
+
+    const order = await Order.findOne({ orderNumber: tran_id });
+    if (!order) {
+      return res.status(404).send("Order Not Found");
+    }
+
+    if (order.paymentStatus === "Paid") {
+      return res.status(200).send("Order already paid");
+    }
+
+    const validationRes = await validateSSLCommerzPayment(val_id);
+    if (validationRes.isValid) {
+      order.paymentStatus = "Paid";
+      order.orderStatus = "Confirmed";
+      order.paymentTransactionId = val_id;
+      order.paymentDetails = validationRes.data;
+      await order.save();
+      console.log(`✅ [SSLCommerz IPN] Order ${tran_id} validated and marked as PAID.`);
+    }
+
+    res.status(200).send("IPN Processed");
+  } catch (error) {
+    console.error("SSLCommerz IPN Error:", error);
+    res.status(500).send("IPN Failed");
   }
 });
 

@@ -102,6 +102,12 @@ const orderSchema = new mongoose.Schema(
     paymentTransactionId: {
       type: String,
     },
+    sslcommerzSessionKey: {
+      type: String,
+    },
+    paymentDetails: {
+      type: mongoose.Schema.Types.Mixed,
+    },
     orderStatus: {
       type: String,
       enum: ["Placed", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"],

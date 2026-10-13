@@ -46,6 +46,8 @@ export const ShopProvider = ({ children }) => {
 
   // UI Drawers & Modals
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [activeOrderConfirmation, setActiveOrderConfirmation] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
@@ -222,6 +224,10 @@ export const ShopProvider = ({ children }) => {
         isInWishlist,
         isCartOpen,
         setIsCartOpen,
+        isCheckoutOpen,
+        setIsCheckoutOpen,
+        activeOrderConfirmation,
+        setActiveOrderConfirmation,
         isMobileMenuOpen,
         setIsMobileMenuOpen,
         isSearchOpen,

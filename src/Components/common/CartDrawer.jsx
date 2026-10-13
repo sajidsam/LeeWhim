@@ -9,6 +9,7 @@ const CartDrawer = () => {
   const {
     isCartOpen,
     setIsCartOpen,
+    setIsCheckoutOpen,
     cart,
     cartCount,
     cartSubtotal,
@@ -215,22 +216,22 @@ const CartDrawer = () => {
                 </div>
               </div>
 
-              {/* Checkout Button - Borderless */}
+              {/* Checkout Button - Open Secure Luxury Checkout Modal */}
               <button
                 type="button"
                 onClick={() => {
-                  alert(`Thank you for choosing Rongon! Your demo order of ৳${finalTotal.toLocaleString()} has been received for Cash on Delivery.`);
                   setIsCartOpen(false);
+                  setIsCheckoutOpen(true);
                 }}
-                className="w-full py-3 bg-[#72383D] hover:bg-[#322D29] text-[#EFE9E1] font-semibold text-xs sm:text-sm rounded-xl transition-all duration-200 shadow-md flex items-center justify-center gap-2 active:scale-98"
+                className="w-full py-3.5 bg-[#72383D] hover:bg-[#322D29] text-[#EFE9E1] font-semibold text-xs sm:text-sm rounded-xl transition-all duration-200 shadow-md flex items-center justify-center gap-2 active:scale-98 cursor-pointer"
               >
-                Proceed to Checkout (Cash on Delivery)
+                <span>Proceed to Secure Checkout</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#AC9C8D]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#72383D]" />
-                <span>100% Safe & Secure Cash on Delivery</span>
+                <span>SSL 256-Bit Encrypted & SSLCommerz Verified</span>
               </div>
 
               <div className="pt-2 border-t border-[#D1C7BD]/30">

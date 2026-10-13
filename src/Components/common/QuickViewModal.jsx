@@ -3,7 +3,7 @@ import { useShop } from "../../Context/ShopContext";
 import { X, Heart, Star, ShoppingBag, Zap, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 
 const QuickViewModal = () => {
-  const { quickViewProduct, setQuickViewProduct, addToCart, toggleWishlist, isInWishlist, setIsCartOpen } = useShop();
+  const { quickViewProduct, setQuickViewProduct, addToCart, toggleWishlist, isInWishlist, setIsCartOpen, setIsCheckoutOpen } = useShop();
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(null);
@@ -29,7 +29,7 @@ const QuickViewModal = () => {
   const handleBuyNow = () => {
     addToCart(product, quantity, currentColor);
     handleClose();
-    setIsCartOpen(true);
+    setIsCheckoutOpen(true);
   };
 
   return (
