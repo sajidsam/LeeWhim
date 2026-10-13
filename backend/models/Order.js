@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
  */
 const orderItemSchema = new mongoose.Schema({
   productId: {
-    type: Number,
+    type: mongoose.Schema.Types.Mixed,
     required: true,
   },
   sku: {
@@ -56,7 +56,7 @@ const orderSchema = new mongoose.Schema(
     },
     customer: {
       name: { type: String, required: true },
-      email: { type: String, required: true, lowercase: true },
+      email: { type: String, required: false, lowercase: true },
       phone: { type: String, required: true },
       address: { type: String, required: true },
       city: { type: String, required: true, default: "Dhaka" },

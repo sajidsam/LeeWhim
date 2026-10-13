@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
+import { BkashIcon, NagadIcon, VisaIcon, MastercardIcon } from "./PayWithBadges";
 
 const FREE_SHIPPING_THRESHOLD = 2500;
 
@@ -168,7 +169,7 @@ const CheckoutModal = () => {
                 Rongon Secure Checkout
               </h2>
               <p className="text-[11px] text-[#D1C7BD] flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#22C55E]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#D1C7BD]" />
                 <span>SSL 256-Bit Encrypted & Verified by SSLCommerz</span>
               </p>
             </div>
@@ -306,77 +307,69 @@ const CheckoutModal = () => {
                   <span>2. Payment Method</span>
                 </h3>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {/* SSLCommerz Option */}
                   <label
-                    className={`block p-4 rounded-2xl border transition-all cursor-pointer relative ${
+                    className={`block p-3.5 rounded-xl border transition-all cursor-pointer ${
                       paymentMethod === "SSLCommerz"
-                        ? "bg-white border-[#72383D] ring-2 ring-[#72383D]/20 shadow-xs"
+                        ? "bg-white border-[#72383D] ring-2 ring-[#72383D]/15 shadow-xs"
                         : "bg-white/60 border-[#E0D5C7] hover:bg-white"
                     }`}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
                         <input
                           type="radio"
                           name="paymentMethod"
                           value="SSLCommerz"
                           checked={paymentMethod === "SSLCommerz"}
                           onChange={() => setPaymentMethod("SSLCommerz")}
-                          className="mt-1 accent-[#72383D]"
+                          className="accent-[#72383D]"
                         />
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs sm:text-sm font-bold text-[#322D29]">
-                              Pay Online with SSLCommerz
-                            </span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#22C55E]/15 text-[#16A34A]">
-                              Instant & Secure
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-[#7D7063] mt-0.5 leading-relaxed">
-                            bKash, Nagad, Rocket, Visa, Mastercard, AMEX & Internet Banking.
-                          </p>
-
-                          {/* Logos badge */}
-                          <div className="flex items-center gap-1.5 mt-2 flex-wrap text-[10px] text-[#554B41]">
-                            <span className="px-1.5 py-0.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] font-semibold">bKash</span>
-                            <span className="px-1.5 py-0.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] font-semibold">Nagad</span>
-                            <span className="px-1.5 py-0.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] font-semibold">Visa</span>
-                            <span className="px-1.5 py-0.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] font-semibold">Mastercard</span>
-                            <span className="px-1.5 py-0.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] font-semibold">Internet Banking</span>
-                          </div>
-                        </div>
+                        <span className="text-xs sm:text-sm font-bold text-[#322D29]">
+                          Pay with SSLCommerz
+                        </span>
                       </div>
-                      <ShieldCheck className="w-5 h-5 text-[#72383D] shrink-0" />
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className="h-6 px-1.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] flex items-center justify-center">
+                          <BkashIcon />
+                        </span>
+                        <span className="h-6 px-1.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] flex items-center justify-center">
+                          <NagadIcon />
+                        </span>
+                        <span className="h-6 px-1.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] flex items-center justify-center">
+                          <VisaIcon />
+                        </span>
+                        <span className="h-6 px-1.5 bg-[#FAF7F2] rounded border border-[#E0D5C7] flex items-center justify-center">
+                          <MastercardIcon />
+                        </span>
+                      </div>
                     </div>
                   </label>
 
                   {/* Cash on Delivery Option */}
                   <label
-                    className={`block p-4 rounded-2xl border transition-all cursor-pointer ${
+                    className={`block p-3.5 rounded-xl border transition-all cursor-pointer ${
                       paymentMethod === "COD"
-                        ? "bg-white border-[#72383D] ring-2 ring-[#72383D]/20 shadow-xs"
+                        ? "bg-white border-[#72383D] ring-2 ring-[#72383D]/15 shadow-xs"
                         : "bg-white/60 border-[#E0D5C7] hover:bg-white"
                     }`}
                   >
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="COD"
-                        checked={paymentMethod === "COD"}
-                        onChange={() => setPaymentMethod("COD")}
-                        className="mt-1 accent-[#72383D]"
-                      />
-                      <div>
-                        <div className="text-xs sm:text-sm font-bold text-[#322D29]">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="COD"
+                          checked={paymentMethod === "COD"}
+                          onChange={() => setPaymentMethod("COD")}
+                          className="accent-[#72383D]"
+                        />
+                        <span className="text-xs sm:text-sm font-bold text-[#322D29]">
                           Cash on Delivery (COD)
-                        </div>
-                        <p className="text-[11px] text-[#7D7063] mt-0.5 leading-relaxed">
-                          Pay with cash to the delivery representative when your parcel reaches your doorstep.
-                        </p>
+                        </span>
                       </div>
+                      <span className="text-xs text-[#7D7063] font-medium">Pay at Doorstep</span>
                     </div>
                   </label>
                 </div>
@@ -424,7 +417,7 @@ const CheckoutModal = () => {
                     <span>Delivery ({deliveryZone === "inside" ? "Dhaka" : "Outside"})</span>
                     <span>
                       {deliveryFee === 0 ? (
-                        <strong className="text-[#22C55E] font-bold">FREE</strong>
+                        <strong className="text-[#72383D] font-bold">FREE</strong>
                       ) : (
                         `৳${deliveryFee}`
                       )}
