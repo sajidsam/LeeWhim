@@ -56,24 +56,7 @@
 
 ---
 
-## ⚡ High-Speed Architecture & Performance Optimization
 
-To achieve instant page loads, sub-second responses, and featherweight DOM rendering across 969+ products, the platform employs a dual in-memory caching and pagination pipeline:
-
-```mermaid
-graph TD
-    Client[Browser / React App] -->|1. Client Memory Cache Check| CCache{Client Cache Hit?}
-    CCache -- Yes (0ms) --> Render[Instant Instant UI Render]
-    CCache -- No --> Proxy[Vite Proxy / Express API :5000]
-    Proxy -->|2. Server In-Memory Cache Check| SCache{Server Cache Hit?}
-    SCache -- Yes (<2ms) --> ReturnAPI[Return JSON with X-Cache: HIT]
-    SCache -- No --> Mongo[(MongoDB Atlas)]
-    Mongo -->|Mongoose .lean() + Index Query| DBRes[Fetch Paginated Batch]
-    DBRes --> SetSCache[Store in Server Cache 5-min TTL]
-    SetSCache --> ReturnAPI
-    ReturnAPI --> SetCCache[Store in Client Cache 3-min TTL]
-    SetCCache --> Render
-```
 
 ### 1. Dual-Layer In-Memory Caching (Ultra-Fast Connection)
 - **Server-Side In-Memory Cache (`backend/server.js`)**:
