@@ -2,9 +2,9 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import {
   fetchProducts,
   fetchCategories,
-  fetchBanners,
   fetchReviews,
 } from "../services/api";
+import { HERO_SLIDES, PROMO_BANNERS } from "../data/bannerData";
 
 const ShopContext = createContext();
 
@@ -15,8 +15,8 @@ export const ShopProvider = ({ children }) => {
   const [kurtiProducts, setKurtiProducts] = useState([]);
   const [bagProducts, setBagProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [heroSlides, setHeroSlides] = useState([]);
-  const [promoBanners, setPromoBanners] = useState([]);
+  const [heroSlides, setHeroSlides] = useState(HERO_SLIDES);
+  const [promoBanners, setPromoBanners] = useState(PROMO_BANNERS);
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,21 +59,14 @@ export const ShopProvider = ({ children }) => {
   const loadDatabaseData = useCallback(async () => {
     setIsLoading(true);
     try {
-      // 1. Critical above-the-fold content first (Hero slider & Category bar)
-      const [categoriesRes, heroBannersRes, promosRes] = await Promise.allSettled([
-        fetchCategories(),
-        fetchBanners("hero"),
-        fetchBanners("promo"),
-      ]);
+      // 1. Critical above-the-fold category bar
+      const categoriesRes = await fetchCategories().catch((e) => {
+        console.error("Failed to load categories:", e);
+        return [];
+      });
 
-      if (categoriesRes.status === "fulfilled" && categoriesRes.value?.length) {
-        setCategories(categoriesRes.value);
-      }
-      if (heroBannersRes.status === "fulfilled" && heroBannersRes.value?.length) {
-        setHeroSlides(heroBannersRes.value);
-      }
-      if (promosRes.status === "fulfilled" && promosRes.value?.length) {
-        setPromoBanners(promosRes.value);
+      if (categoriesRes && categoriesRes.length) {
+        setCategories(categoriesRes);
       }
 
       // 2. Product showcases & reviews (rendered independently so one never blocks another)

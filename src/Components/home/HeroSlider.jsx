@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useShop } from "../../Context/ShopContext";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from "lucide-react";
+import { HERO_SLIDES } from "../../data/bannerData";
 import banner1 from "@/assets/banner.png";
 import banner2 from "@/assets/banner2.png";
 import banner3 from "@/assets/banner3.png";
+import banner4 from "@/assets/banner4.png";
 
 const BANNER_ASSETS = {
   "slide-1": banner1,
   "slide-2": banner2,
   "slide-3": banner3,
+  "slide-4": banner4,
 };
 
 const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
-  const { setActiveCategoryFilter, heroSlides = [] } = useShop();
+  const { setActiveCategoryFilter, heroSlides } = useShop();
 
-  const slides = heroSlides;
+  const slides = heroSlides && heroSlides.length > 0 ? heroSlides : HERO_SLIDES;
 
   // Auto advance slide - resets timer on user interaction
   useEffect(() => {
@@ -78,6 +81,7 @@ const HeroSlider = () => {
         const isActive = index === currentSlide;
         const bannerKey = slide.bannerId || slide.id;
         const slideImg = BANNER_ASSETS[bannerKey] || slide.image;
+        const isSlide4 = bannerKey === "slide-4";
         const isSlide3 = bannerKey === "slide-3";
         const isSlide2 = bannerKey === "slide-2";
 
@@ -88,7 +92,7 @@ const HeroSlider = () => {
               }`}
           >
             {/* Background Image with Zoom animation */}
-            <div className="absolute inset-0 overflow-hidden bg-[#72383D]">
+            <div className={`absolute inset-0 overflow-hidden ${isSlide4 ? "bg-[#3D280B]" : isSlide3 ? "bg-[#0C1A30]" : isSlide2 ? "bg-[#241715]" : "bg-[#72383D]"}`}>
               <img
                 src={slideImg}
                 alt={slide.title}
@@ -99,7 +103,12 @@ const HeroSlider = () => {
                 } ${isActive ? "scale-103" : "scale-100"}`}
               />
               {/* Luxury Gradient Overlay */}
-              {isSlide3 ? (
+              {isSlide4 ? (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#241708]/95 via-[#241708]/65 to-transparent sm:from-[#241708]/90 sm:via-[#241708]/40 lg:from-[#241708]/80 lg:via-transparent lg:to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#241708]/60 via-transparent to-transparent sm:hidden" />
+                </>
+              ) : isSlide3 ? (
                 <>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0C1A30]/95 via-[#0C1A30]/65 to-transparent sm:from-[#0C1A30]/90 sm:via-[#0C1A30]/40 lg:from-[#0C1A30]/80 lg:via-transparent lg:to-transparent" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0C1A30]/60 via-transparent to-transparent sm:hidden" />
@@ -121,7 +130,11 @@ const HeroSlider = () => {
             <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 flex items-center">
               <div className="max-w-[260px] sm:max-w-sm md:max-w-md lg:max-w-xl text-[#EFE9E1] space-y-2.5 sm:space-y-1.5 md:space-y-3 lg:space-y-4">
                 {/* Tag - Hidden on mobile */}
-                <div className="hidden sm:inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-[#72383D] text-[#EFE9E1] text-[10px] md:text-xs font-semibold tracking-wider uppercase">
+                <div
+                  className={`hidden sm:inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 md:px-3 md:py-1 rounded-full ${
+                    isSlide4 ? "bg-[#A37012]" : "bg-[#72383D]"
+                  } text-[#EFE9E1] text-[10px] md:text-xs font-semibold tracking-wider uppercase`}
+                >
                   <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#D1C7BD]" />
                   <span>{slide.tag}</span>
                 </div>
@@ -155,7 +168,9 @@ const HeroSlider = () => {
                   <button
                     type="button"
                     onClick={() => handleCtaClick(slide.categorySlug)}
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2 sm:px-4 sm:py-2 md:px-6 md:py-2.5 lg:px-8 lg:py-3.5 bg-[#72383D] hover:bg-[#322D29] text-[#EFE9E1] text-xs sm:text-xs md:text-sm font-bold rounded-lg sm:rounded-xl transition-all duration-300 shadow-md sm:shadow-lg active:scale-95"
+                    className={`inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2 sm:px-4 sm:py-2 md:px-6 md:py-2.5 lg:px-8 lg:py-3.5 ${
+                      isSlide4 ? "bg-[#A37012] hover:bg-[#785108]" : "bg-[#72383D] hover:bg-[#322D29]"
+                    } text-[#EFE9E1] text-xs sm:text-xs md:text-sm font-bold rounded-lg sm:rounded-xl transition-all duration-300 shadow-md sm:shadow-lg active:scale-95`}
                   >
                     <span className="sm:hidden">{slide.mobileButtonText || "Shop Now"}</span>
                     <span className="hidden sm:inline">{slide.buttonText}</span>
@@ -195,8 +210,11 @@ const HeroSlider = () => {
             type="button"
             onClick={() => setCurrentSlide(i)}
             aria-label={`Go to slide ${i + 1}`}
-            className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${i === currentSlide ? "w-6 sm:w-8 bg-[#72383D]" : "w-1.5 sm:w-2 bg-[#D9D9D9]/60 hover:bg-[#EFE9E1]"
-              }`}
+            className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+              i === currentSlide
+                ? (slides[i]?.bannerId === "slide-4" || slides[i]?.id === "slide-4" ? "w-6 sm:w-8 bg-[#A37012]" : "w-6 sm:w-8 bg-[#72383D]")
+                : "w-1.5 sm:w-2 bg-[#D9D9D9]/60 hover:bg-[#EFE9E1]"
+            }`}
           />
         ))}
       </div>
